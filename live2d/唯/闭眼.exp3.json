@@ -1,0 +1,27 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.1,
+  "FadeOutTime": 0.1,
+  "Parameters": [
+    {
+      "Id": "PARAM_EYE_L_OPEN",
+      "Value": 0.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_L_SMILE",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_R_OPEN",
+      "Value": 0.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_R_SMILE",
+      "Value": -1.0,
+      "Blend": "Add"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "Version": 3,
+  "Type": 0,
+  "FileReferences": {
+    "Moc": "Moc_15.moc3",
+    "Textures": [
+      "Textures_0_15.png"
+    ],
+    "Physics": "Physics_15.json",
+    "PhysicsV2": {
+      "File": "Physics_15.json"
+    },
+    "Motions": {
+      "Idle": [
+        {
+          "File": "Motions_Idle_0_File_15.json",
+          "FileLoop": true,
+          "Priority": 2
+        }
+      ],
+      "Start": [
+        {
+          "File": "Motions_Start_0_File_15.json",
+          "Priority": 9
+        }
+      ],
+      "Tick": [
+        {
+          "File": "Motions_Tick_0_File_15.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_Tick_1_File_15.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_Tick_2_File_15.json",
+          "Priority": 3
+        }
+      ],
+      "猫头": [
+        {
+          "File": "Motions_猫头_0_File_15.json",
+          "Priority": 4
+        }
+      ],
+      "猫尾": [
+        {
+          "File": "Motions_猫尾_0_File_15.json",
+          "Priority": 4
+        }
+      ],
+      "摸头": [
+        {
+          "File": "Motions_摸头_0_File_15.json",
+          "Priority": 4
+        }
+      ],
+      "手": [
+        {
+          "Priority": 4
+        }
+      ],
+      "猫身": [
+        {
+          "File": "Motions_猫身_0_File_15.json",
+          "Priority": 4
+        }
+      ],
+      "涩涩": [
+        {
+          "File": "Motions_涩涩_0_File_15.json",
+          "Priority": 4
+        }
+      ]
+    }
+  },
+  "HitAreas": [
+    {
+      "Name": "1涩涩",
+      "Id": "D_PSD_120",
+      "Motion": "涩涩"
+    },
+    {
+      "Name": "2涩涩",
+      "Id": "D_PSD_119",
+      "Motion": "涩涩"
+    },
+    {
+      "Name": "3涩涩",
+      "Id": "D_PSD_116",
+      "Motion": "涩涩"
+    },
+    {
+      "Name": "4涩涩",
+      "Id": "D_PSD_117",
+      "Motion": "涩涩"
+    },
+    {
+      "Name": "5涩涩",
+      "Id": "D_PSD_118",
+      "Motion": "涩涩"
+    },
+    {
+      "Name": "猫头",
+      "Id": "D_PSD_136",
+      "Motion": "猫头"
+    },
+    {
+      "Name": "猫尾",
+      "Id": "D_PSD_129",
+      "Motion": "猫尾"
+    },
+    {
+      "Name": "摸头",
+      "Id": "D_PSD_45",
+      "Motion": "摸头"
+    },
+    {
+      "Name": "手",
+      "Id": "D_PSD_111",
+      "Motion": "手"
+    },
+    {
+      "Name": "右手",
+      "Id": "D_PSD_103"
+    },
+    {
+      "Name": "猫身",
+      "Id": "D_PSD_133",
+      "Motion": "猫身"
+    }
+  ],
+  "Options": {
+    "TexFixed": true
+  }
+}

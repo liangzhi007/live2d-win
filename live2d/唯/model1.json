@@ -1,0 +1,187 @@
+{
+    "Version": 3,
+    "Type": 0,
+    "FileReferences": {
+        "Moc": "Moc_1.moc3",
+        "Textures": [
+            "Textures_0_1.png"
+        ],
+        "Physics": "Physics_1.json",
+        "PhysicsV2": {
+            "File": "Physics_1.json"
+        },
+        "Motions": {
+            "左胸": [
+                {
+                    "File": "Motions_胸_0_File_1.json",
+                    "Priority": 4
+                }
+            ],
+            "右胸": [
+                {
+                    "File": "Motions_胸_0_File_1.json",
+                    "Priority": 4
+                }
+            ],
+            "Leave10_20_30": [
+                {
+                    "File": "Motions_Leave10_20_30_0_File_1.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_1_File_1.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_2_File_1.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_3_File_1.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_4_File_1.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_5_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_6_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_7_File_1.json"
+                }
+            ],
+            "嘴巴": [
+                {
+                    "File": "Motions_Leave10_20_30_2_File_1.json"
+                }
+            ],
+            "肚子": [
+                {
+                    "File": "Motions_肚子_0_File_1.json"
+                }
+            ],
+            "左球": [
+                {
+                    "File": "Motions_Leave10_20_30_3_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_6_File_1.json"
+                }
+            ],
+            "右球": [
+                {
+                    "File": "Motions_Leave10_20_30_3_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_6_File_1.json"
+                }
+            ],
+            "摸头时": [
+                {
+                    "File": "Motions_摸头时_0_File_1.json"
+                }
+            ],
+            "未摸头": [
+                {
+                    "File": "Motions_未摸头_0_File_1.json"
+                }
+            ],
+            "完成摸头": [
+                {
+                    "File": "Motions_Leave10_20_30_5_File_1.json"
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_1.json"
+                },
+                {
+                    "File": "Motions_完成摸头_2_File_1.json"
+                }
+            ],
+            "右手": [
+                {
+                    "File": "Motions_Leave10_20_30_4_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_7_File_1.json"
+                }
+            ],
+            "左手": [
+                {
+                    "File": "Motions_Leave10_20_30_4_File_1.json"
+                },
+                {
+                    "File": "Motions_Leave10_20_30_7_File_1.json"
+                }
+            ],
+            "掀裙子时": [
+                {
+                    "File": "Motions_掀裙子时_0_File_1.json"
+                }
+            ],
+            "掀裙子后": [
+                {
+                    "File": "Motions_掀裙子后_0_File_1.json"
+                }
+            ],
+            "Idle": [
+                {
+                    "File": "Motions_Idle_0_File_1.json"
+                }
+            ],
+            "Start": [
+                {
+                    "File": "Motions_Leave10_20_30_5_File_1.json"
+                }
+            ]
+        }
+    },
+    "HitAreas": [
+        {
+            "Name": "右胸",
+            "Id": "D_PSD2_276"
+        },
+        {
+            "Name": "左胸",
+            "Id": "D_PSD2_274"
+        },
+        {
+            "Name": "嘴巴",
+            "Id": "D_PSD_598"
+        },
+        {
+            "Name": "肚子",
+            "Id": "D_PSD_62"
+        },
+        {
+            "Name": "左球",
+            "Id": "D_PSD2_115"
+        },
+        {
+            "Name": "右球",
+            "Id": "D_PSD2_119"
+        },
+        {
+            "Name": "摸头",
+            "Id": "D_PSD_588"
+        },
+        {
+            "Name": "右手",
+            "Id": "D_PSD2_24"
+        },
+        {
+            "Name": "左手",
+            "Id": "D_PSD_72"
+        },
+        {
+            "Name": "裙子",
+            "Id": "D_PSD_57"
+        }
+    ],
+    "Options": {
+        "TexFixed": true
+    }
+}

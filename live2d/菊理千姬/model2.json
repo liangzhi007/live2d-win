@@ -1,0 +1,157 @@
+{
+  "Version": 3,
+  "Type": 0,
+  "FileReferences": {
+    "Moc": "Moc_2.moc3",
+    "Textures": [
+      "Textures_0_2.png"
+    ],
+    "Physics": "Physics_2.json",
+    "PhysicsV2": {
+      "File": "Physics_2.json"
+    },
+    "Motions": {
+      "左手": [
+        {
+          "File": "Motions_左手_0_File_2.json",
+          "Priority": 4
+        }
+      ],
+      "右手": [
+        {
+          "File": "Motions_右手_0_File_2.json",
+          "Priority": 4
+        }
+      ],
+      "摸头时": [
+        {
+          "File": "Motions_摸头时_0_File_2.json",
+          "FileLoop": true,
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "未摸头": [
+        {
+          "File": "Motions_未摸头_0_File_2.json",
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "完成摸头": [
+        {
+          "File": "Motions_完成摸头_0_File_2.json",
+          "Priority": 5
+        }
+      ],
+      "胸": [
+        {
+          "File": "Motions_胸_0_File_2.json",
+          "Priority": 4
+        }
+      ],
+      "Start": [
+        {
+          "File": "Motions_Start_0_File_2.json",
+          "Priority": 9
+        }
+      ],
+      "额": [
+        {
+          "File": "Motions_额_0_File_2.json",
+          "Priority": 4
+        }
+      ],
+      "Idle": [
+        {
+          "File": "Motions_Idle_0_File_2.json",
+          "FileLoop": true,
+          "Priority": 2
+        }
+      ],
+      "Leave10_20_30": [
+        {
+          "File": "Motions_未摸头_0_File_2.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_Start_0_File_2.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_右手_0_File_2.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_左手_0_File_2.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_完成摸头_0_File_2.json",
+          "Priority": 3
+        }
+      ]
+    }
+  },
+  "HitAreas": [
+    {
+      "Name": "左手",
+      "Id": "D_PSD_17",
+      "Order": 1,
+      "Motion": "左手"
+    },
+    {
+      "Name": "1左手",
+      "Id": "D_MY_HAND_L_01",
+      "Order": 1,
+      "Motion": "左手"
+    },
+    {
+      "Name": "右手",
+      "Id": "D_PSD_04",
+      "Order": 1,
+      "Motion": "右手"
+    },
+    {
+      "Name": "1右手",
+      "Id": "D_PSD5_06",
+      "Order": 1,
+      "Motion": "右手"
+    },
+    {
+      "Name": "摸头",
+      "Id": "D_PSD_75",
+      "Motion": "完成摸头",
+      "EnterMtn": "摸头时",
+      "ExitMtn": "未摸头"
+    },
+    {
+      "Name": "右胸",
+      "Id": "D_PSD1_01",
+      "Motion": "胸"
+    },
+    {
+      "Name": "左胸",
+      "Id": "D_PSD1_00",
+      "Motion": "胸"
+    },
+    {
+      "Name": "裙子",
+      "Id": "D_PSD1_11",
+      "Motion": "额"
+    },
+    {
+      "Name": "左腿",
+      "Id": "D_PSD8_04",
+      "Motion": "额"
+    },
+    {
+      "Name": "右腿",
+      "Id": "D_PSD8_01",
+      "Motion": "额"
+    }
+  ],
+  "Options": {
+    "TexFixed": true
+  }
+}

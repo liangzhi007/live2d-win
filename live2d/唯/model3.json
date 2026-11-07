@@ -1,0 +1,310 @@
+{
+    "Version": 3,
+    "Type": 0,
+    "FileReferences": {
+        "Moc": "Moc_3.moc3",
+        "Textures": [
+            "Textures_0_3.png"
+        ],
+        "Physics": "Physics_3.json",
+        "PhysicsV2": {
+            "File": "Physics_3.json"
+        },
+        "Motions": {
+            "刀子": [
+                {
+                    "File": "Motions_刀子_0_File_3.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_刀子_1_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "嘴巴": [
+                {
+                    "File": "Motions_嘴巴_0_File_3.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_嘴巴_1_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "摸头时": [
+                {
+                    "File": "Motions_摸头时_0_File_3.json",
+                    "FileLoop": true,
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "未摸头": [
+                {
+                    "File": "Motions_未摸头_0_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4,
+                    "Interruptable": true
+                },
+                {
+                    "File": "Motions_未摸头_1_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "完成摸头": [
+                {
+                    "File": "Motions_完成摸头_0_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                }
+            ],
+            "左胸": [
+                {
+                    "File": "Motions_胸_0_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "右胸": [
+                {
+                    "File": "Motions_胸_0_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "右手": [
+                {
+                    "File": "Motions_右手_0_File_3.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_右手_1_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "左手": [
+                {
+                    "File": "Motions_左手_0_File_3.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_右手_1_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "肚子": [
+                {
+                    "File": "Motions_肚子_0_File_3.json",
+                    "Priority": 4
+                }
+            ],
+            "掀裙子时": [
+                {
+                    "File": "Motions_掀裙子时_0_File_3.json",
+                    "FileLoop": true,
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4
+                }
+            ],
+            "掀裙子后": [
+                {
+                    "File": "Motions_掀裙子后_0_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                }
+            ],
+            "Idle": [
+                {
+                    "File": "Motions_Idle_0_File_3.json",
+                    "FileLoop": true,
+                    "Priority": 2
+                }
+            ],
+            "Start": [
+                {
+                    "File": "Motions_完成摸头_1_File_3.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 8
+                }
+            ],
+            "Leave10_20_30": [
+                {
+                    "File": "Motions_刀子_0_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_嘴巴_0_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_右手_0_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_左手_0_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_嘴巴_1_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_肚子_0_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_右手_1_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_8_File_3.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_刀子_1_File_3.json",
+                    "Priority": 3
+                }
+            ]
+        },
+        "Expressions": [
+            {
+                "Name": "--",
+                "File": "--.exp3.json"
+            },
+            {
+                "Name": "呆滞",
+                "File": "呆滞.exp3.json"
+            },
+            {
+                "Name": "裙子",
+                "File": "裙子.exp3.json"
+            },
+            {
+                "Name": "星星",
+                "File": "星星.exp3.json"
+            },
+            {
+                "Name": "晕",
+                "File": "晕.exp3.json"
+            },
+            {
+                "Name": "脸红",
+                "File": "脸红.exp3.json"
+            },
+            {
+                "Name": "正常",
+                "File": "正常.exp3.json"
+            },
+            {
+                "Name": "闭眼",
+                "File": "闭眼.exp3.json"
+            }
+        ]
+    },
+    "InteractionConfig": {
+            "headArea": "摸头",
+            "上下": [
+                {
+                    "裙子": [
+                        "PARAM_XIANQUNZI",
+                        "掀裙子时",
+                        "掀裙子后"
+                    ]
+                }
+            ],
+            "左右": [
+                {
+                    "左腿": [
+                        "PARAM_CHEWAZI_02",
+                        "",
+                        "腿"
+                    ],
+                    "右腿": [
+                        "PARAM_CHEWAZI_L_02",
+                        "",
+                        "腿"
+                    ]
+                }
+            ]
+        },
+    "HitAreas": [
+        {
+            "Name": "刀子",
+            "Id": "pofudao_daobing",
+            "Order": 3,
+            "Motion": "刀子"
+        },
+        {
+            "Name": "嘴巴",
+            "Id": "D_PSD_598",
+            "Order": 3,
+            "Motion": "嘴巴"
+        },
+        {
+            "Name": "摸头",
+            "Id": "D_PSD_593",
+            "Motion": "完成摸头",
+            "EnterMtn": "摸头时",
+            "ExitMtn": "未摸头"
+        },
+        {
+            "Name": "右胸",
+            "Id": "xiongbu_R",
+            "Motion": "胸"
+        },
+        {
+            "Name": "左胸",
+            "Id": "xiongbu_L",
+            "Motion": "胸"
+        },
+        {
+            "Name": "右手",
+            "Id": "D_PSD_352",
+            "Order": 2,
+            "Motion": "右手"
+        },
+        {
+            "Name": "左手",
+            "Id": "D_PSD2_24",
+            "Order": 2,
+            "Motion": "左手"
+        },
+        {
+            "Name": "左手臂",
+            "Id": "D_PSD_347",
+            "Order": 2,
+            "Motion": "左手"
+        },
+        {
+            "Name": "肚子",
+            "Id": "D_PSD_62",
+            "Order": 1,
+            "Motion": "肚子"
+        },
+        {
+            "Name": "裙子",
+            "Id": "qunzi_1ceng"
+        }
+    ],
+    "Options": {
+        "TexFixed": true
+    }
+}

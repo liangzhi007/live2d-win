@@ -1,0 +1,221 @@
+{
+    "Version": 3,
+    "Type": 0,
+    "FileReferences": {
+        "Moc": "Moc_4.moc3",
+        "Textures": [
+            "Textures_0_4.png"
+        ],
+        "Physics": "Physics_4.json",
+        "PhysicsV2": {
+            "File": "Physics_4.json"
+        },
+        "Motions": {
+            "Start": [
+                {
+                    "File": "Motions_Start_0_File_4.json",
+                    "Priority": 9
+                }
+            ],
+            "Idle": [
+                {
+                    "File": "Motions_Idle_0_File_4.json",
+                    "FileLoop": true,
+                    "Priority": 2
+                }
+            ],
+            "Leave10_20_30": [
+                {
+                    "File": "Motions_Leave10_20_30_0_File_4.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_1_File_4.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_2_File_4.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_Leave10_20_30_3_File_4.json",
+                    "Priority": 3
+                }
+            ],
+            "胸": [
+                {
+                    "File": "Motions_胸_0_File_4.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_胸_1_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "腿": [
+                {
+                    "File": "Motions_腿_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "腿蝴蝶结左": [
+                {
+                    "File": "Motions_腿蝴蝶结_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "腿蝴蝶结右": [
+                {
+                    "File": "Motions_腿蝴蝶结_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "屁股": [
+                {
+                    "File": "Motions_屁股_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "肚子": [
+                {
+                    "File": "Motions_肚子_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "右手": [
+                {
+                    "File": "Motions_右手_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "左手": [
+                {
+                    "File": "Motions_左手_0_File_4.json",
+                    "Priority": 4
+                }
+            ],
+            "摸头时": [
+                {
+                    "File": "Motions_摸头时_0_File_4.json",
+                    "FileLoop": true,
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "未摸头": [
+                {
+                    "File": "Motions_肚子_0_File_4.json",
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "完成摸头": [
+                {
+                    "File": "Motions_完成摸头_0_File_4.json",
+                    "Priority": 5
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_4.json",
+                    "Priority": 5
+                }
+            ],
+            "化妆": [
+                {
+                    "File": "Motions_化妆_0_File_4.json",
+                    "Priority": 4,
+                    "Weight": 2
+                },
+                {
+                    "File": "Motions_化妆_1_File_4.json",
+                    "Priority": 4
+                }
+            ]
+        }
+    },
+    "HitAreas": [
+        {
+            "Name": "胸",
+            "Id": "xiomg",
+            "Order": 3,
+            "Motion": "胸"
+        },
+        {
+            "Name": "腿",
+            "Id": "ArtMesh174",
+            "Order": 1,
+            "Motion": "腿"
+        },
+        {
+            "Name": "脚",
+            "Id": "ArtMesh175",
+            "Order": 1,
+            "Motion": "腿"
+        },
+        {
+            "Name": "屁股",
+            "Id": "ArtMesh176",
+            "Order": 2,
+            "Motion": "屁股"
+        },
+        {
+            "Name": "腿蝴蝶结右",
+            "Id": "ArtMesh177",
+            "Order": 3,
+            "Motion": "腿蝴蝶结"
+        },
+        {
+            "Name": "腿蝴蝶结左",
+            "Id": "ArtMesh178",
+            "Order": 3,
+            "Motion": "腿蝴蝶结"
+        },
+        {
+            "Name": "肚子",
+            "Id": "fu",
+            "Order": 2,
+            "Motion": "肚子"
+        },
+        {
+            "Name": "右手臂",
+            "Id": "ArtMesh130",
+            "Motion": "右手"
+        },
+        {
+            "Name": "右手",
+            "Id": "ArtMesh106",
+            "Motion": "右手"
+        },
+        {
+            "Name": "左手",
+            "Id": "ArtMesh194",
+            "Motion": "左手"
+        },
+        {
+            "Name": "左手臂",
+            "Id": "ArtMesh225",
+            "Motion": "左手"
+        },
+        {
+            "Name": "摸头",
+            "Id": "hounao",
+            "Motion": "完成摸头",
+            "EnterMtn": "摸头时",
+            "ExitMtn": "未摸头"
+        },
+        {
+            "Name": "化妆",
+            "Id": "fen1",
+            "Order": 2,
+            "Motion": "化妆"
+        },
+        {
+            "Name": "fen2",
+            "Id": "fen2",
+            "Order": 2,
+            "Motion": "化妆"
+        }
+    ],
+    "Options": {
+        "TexFixed": true
+    }
+}

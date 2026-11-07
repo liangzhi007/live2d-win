@@ -1,0 +1,384 @@
+{
+    "Version": 3,
+    "Type": 0,
+    "FileReferences": {
+        "Moc": "Moc_2.moc3",
+        "Textures": [
+            "Textures_0_2.png",
+            "Textures_1_2.png"
+        ],
+        "Physics": "Physics_2.json",
+        "PhysicsV2": {
+            "File": "Physics_2.json"
+        },
+        "Motions": {
+            "肚子": [
+                {
+                    "File": "Motions_肚子_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "左胸": [
+                {
+                    "File": "Motions_胸_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "右胸": [
+                {
+                    "File": "Motions_胸_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "扯腿环后": [
+                {
+                    "File": "Motions_腿环_0_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                }
+            ],
+            "嘴": [
+                {
+                    "File": "Motions_嘴_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "右上翅膀": [
+                {
+                    "File": "Motions_翅膀_0_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_1_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "右下翅膀": [
+                {
+                    "File": "Motions_翅膀_0_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_1_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "左上翅膀": [
+                {
+                    "File": "Motions_翅膀_0_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_1_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "左下翅膀": [
+                {
+                    "File": "Motions_翅膀_0_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_1_File_2.json",
+                    "Priority": 4
+                },
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "摸头时": [
+                {
+                    "File": "Motions_摸头时_0_File_2.json",
+                    "FileLoop": true,
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "未摸头": [
+                {
+                    "File": "Motions_未摸头_0_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4,
+                    "Interruptable": true
+                }
+            ],
+            "完成摸头": [
+                {
+                    "File": "Motions_完成摸头_0_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                }
+            ],
+            "掀裙子时": [
+                {
+                    "File": "Motions_掀裙子时_0_File_2.json",
+                    "FileLoop": true,
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 4
+                }
+            ],
+            "项圈": [
+                {
+                    "File": "Motions_项圈_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "掀裙子后": [
+                {
+                    "File": "Motions_掀裙子后_0_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                },
+                {
+                    "File": "Motions_掀裙子后_1_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 5
+                }
+            ],
+            "左手": [
+                {
+                    "File": "Motions_手_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "右手": [
+                {
+                    "File": "Motions_手_0_File_2.json",
+                    "Priority": 4
+                }
+            ],
+            "Start": [
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Command": "mouse_tracking disable",
+                    "PostCommand": "mouse_tracking enable",
+                    "Priority": 9
+                }
+            ],
+            "Idle": [
+                {
+                    "File": "Motions_Idle_0_File_2.json",
+                    "FileLoop": true,
+                    "Priority": 2
+                }
+            ],
+            "Leave10_20_30": [
+                {
+                    "File": "Motions_肚子_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_腿环_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_嘴_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_翅膀_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_完成摸头_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_项圈_0_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_翅膀_1_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_翅膀_2_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_完成摸头_1_File_2.json",
+                    "Priority": 3
+                },
+                {
+                    "File": "Motions_手_0_File_2.json",
+                    "Priority": 3
+                }
+            ]
+        },
+        "Expressions": [
+            {
+                "Name": "--",
+                "File": "--.exp3.json"
+            },
+            {
+                "Name": "呆滞",
+                "File": "呆滞.exp3.json"
+            },
+            {
+                "Name": "裙子",
+                "File": "裙子.exp3.json"
+            },
+            {
+                "Name": "星星",
+                "File": "星星.exp3.json"
+            },
+            {
+                "Name": "晕",
+                "File": "晕.exp3.json"
+            },
+            {
+                "Name": "脸红",
+                "File": "脸红.exp3.json"
+            },
+            {
+                "Name": "正常",
+                "File": "正常.exp3.json"
+            },
+            {
+                "Name": "闭眼",
+                "File": "闭眼.exp3.json"
+            }
+        ]
+    },
+    "InteractionConfig": {
+            "headArea": "摸头",
+            "上下": [
+                {
+                    "裙子": [
+                        "PARAM_XIANQUNZI",
+                        "掀裙子时",
+                        "掀裙子后"
+                    ]
+                }
+            ],
+            "左右": [
+                {
+                    "腿环": [
+                        "PARAM_STOCKINGS",
+                        "",
+                        "扯腿环后"
+                    ]
+                }
+            ]
+        },
+    "HitAreas": [
+        {
+            "Name": "肚子",
+            "Id": "D_PSD_62",
+            "Motion": "肚子"
+        },
+        {
+            "Name": "左胸",
+            "Id": "D_PSD2_54",
+            "Order": 1,
+            "Motion": "胸"
+        },
+        {
+            "Name": "右胸",
+            "Id": "D_PSD2_51",
+            "Order": 1,
+            "Motion": "胸"
+        },
+        {
+            "Name": "嘴",
+            "Id": "D_PSD_598",
+            "Motion": "嘴"
+        },
+        {
+            "Name": "摸头",
+            "Id": "D_PSD_618",
+            "Motion": "完成摸头",
+            "EnterMtn": "摸头时",
+            "ExitMtn": "未摸头"
+        },
+        {
+            "Name": "左上翅膀",
+            "Id": "ArtMesh12",
+            "Motion": "翅膀"
+        },
+        {
+            "Name": "左下翅膀",
+            "Id": "ArtMesh44",
+            "Motion": "翅膀"
+        },
+        {
+            "Name": "右下翅膀",
+            "Id": "ArtMesh9",
+            "Motion": "翅膀"
+        },
+        {
+            "Name": "右上翅膀",
+            "Id": "ArtMesh65",
+            "Motion": "翅膀"
+        },
+        {
+            "Name": "项圈",
+            "Id": "D_PSD_708",
+            "Motion": "项圈"
+        },
+        {
+            "Name": "右手",
+            "Id": "D_PSD2_24",
+            "Order": 2,
+            "Motion": "手"
+        },
+        {
+            "Name": "右手臂",
+            "Id": "D_PSD_700",
+            "Order": 2,
+            "Motion": "手"
+        },
+        {
+            "Name": "左手",
+            "Id": "D_PSD2_01",
+            "Order": 2,
+            "Motion": "手"
+        },
+        {
+            "Name": "左手臂",
+            "Id": "D_PSD_76",
+            "Order": 2,
+            "Motion": "手"
+        },
+        {
+            "Name": "裙子",
+            "Id": "D_PSD_372",
+            "Order": 2
+        },
+        {
+            "Name": "腿环",
+            "Id": "D_PSD_50",
+            "Order": 3
+        }
+    ],
+    "Options": {
+        "TexFixed": true
+    }
+}

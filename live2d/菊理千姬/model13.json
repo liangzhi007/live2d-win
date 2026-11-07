@@ -1,0 +1,287 @@
+{
+  "Version": 3,
+  "Type": 0,
+  "FileReferences": {
+    "Moc": "Moc_13.moc3",
+    "Textures": [
+      "Textures_0_13.png"
+    ],
+    "Physics": "Physics_13.json",
+    "PhysicsV2": {
+      "File": "Physics_13.json"
+    },
+    "Motions": {
+      "帽子": [
+        {
+          "File": "Motions_帽子_0_File_13.json",
+          "Priority": 4
+        },
+        {
+          "File": "Motions_帽子_1_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "Start": [
+        {
+          "File": "Motions_Start_0_File_13.json",
+          "Priority": 9
+        },
+        {
+          "File": "Motions_帽子_0_File_13.json",
+          "Priority": 9
+        }
+      ],
+      "Leave10_20_30": [
+        {
+          "File": "Motions_Start_0_File_13.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_帽子_1_File_13.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_帽子_0_File_13.json",
+          "Priority": 3
+        }
+      ],
+      "肚链": [
+        {
+          "File": "Motions_肚链_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "摸头时": [
+        {
+          "File": "Motions_摸头时_0_File_13.json",
+          "FileLoop": true,
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "未摸头": [
+        {
+          "File": "Motions_未摸头_0_File_13.json",
+          "Priority": 4,
+          "Interruptable": true
+        },
+        {
+          "File": "Motions_未摸头_1_File_13.json",
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "完成摸头": [
+        {
+          "File": "Motions_完成摸头_0_File_13.json",
+          "Priority": 5
+        },
+        {
+          "File": "Motions_完成摸头_1_File_13.json",
+          "Priority": 5
+        },
+        {
+          "File": "Motions_完成摸头_2_File_13.json",
+          "Priority": 5
+        }
+      ],
+      "胸": [
+        {
+          "File": "Motions_胸_0_File_13.json",
+          "Priority": 4
+        },
+        {
+          "File": "Motions_胸_1_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "1": [
+        {
+          "File": "Motions_1_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "2": [
+        {
+          "File": "Motions_2_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "3": [
+        {
+          "File": "Motions_3_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "左手": [
+        {
+          "File": "Motions_手_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "掀裙子时": [
+        {
+          "File": "Motions_掀裙子时_0_File_13.json",
+          "FileLoop": true,
+          "Priority": 4
+        }
+      ],
+      "掀裙子后": [
+        {
+          "File": "Motions_掀裙子后_0_File_13.json",
+          "Priority": 5
+        }
+      ],
+      "右手": [
+        {
+          "File": "Motions_未摸头_0_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "腿": [
+        {
+          "File": "Motions_未摸头_1_File_13.json",
+          "Priority": 4
+        }
+      ],
+      "Idle": [
+        {
+          "File": "Motions_Idle_0_File_13.json",
+          "FileLoop": true,
+          "Priority": 2
+        }
+      ]
+    }
+  },
+  "HitAreas": [
+    {
+      "Name": "1帽子",
+      "Id": "D_PSD_490",
+      "Order": 2,
+      "Motion": "帽子"
+    },
+    {
+      "Name": "2帽子",
+      "Id": "D_PSD_497",
+      "Order": 2,
+      "Motion": "帽子"
+    },
+    {
+      "Name": "3帽子",
+      "Id": "D_PSD_489",
+      "Order": 2,
+      "Motion": "帽子"
+    },
+    {
+      "Name": "4帽子",
+      "Id": "D_PSD_482",
+      "Order": 2,
+      "Motion": "帽子"
+    },
+    {
+      "Name": "5帽子",
+      "Id": "D_PSD_481",
+      "Order": 2,
+      "Motion": "帽子"
+    },
+    {
+      "Name": "摸头",
+      "Id": "D_PSD_75",
+      "Motion": "完成摸头",
+      "EnterMtn": "摸头时",
+      "ExitMtn": "未摸头"
+    },
+    {
+      "Name": "左胸",
+      "Id": "D_PSD_79",
+      "Motion": "胸"
+    },
+    {
+      "Name": "右胸",
+      "Id": "D_PSD_65",
+      "Motion": "胸"
+    },
+    {
+      "Name": "1",
+      "Id": "D_PSD_01",
+      "Motion": "1"
+    },
+    {
+      "Name": "2",
+      "Id": "D_PSD_02",
+      "Motion": "1"
+    },
+    {
+      "Name": "3",
+      "Id": "D_PSD_00",
+      "Motion": "2"
+    },
+    {
+      "Name": "左手",
+      "Id": "D_PSD_522",
+      "Order": 1,
+      "Motion": "手"
+    },
+    {
+      "Name": "右手",
+      "Id": "D_PSD_49",
+      "Order": 1,
+      "Motion": "手1"
+    },
+    {
+      "Name": "1裙子",
+      "Id": "D_PSD_378"
+    },
+    {
+      "Name": "2裙子",
+      "Id": "D_PSD_377"
+    },
+    {
+      "Name": "3裙子",
+      "Id": "D_PSD_379"
+    },
+    {
+      "Name": "左腿",
+      "Id": "D_PSD_82",
+      "Motion": "腿"
+    },
+    {
+      "Name": "右腿",
+      "Id": "D_PSD_37",
+      "Motion": "腿"
+    },
+    {
+      "Name": "1肚链",
+      "Id": "D_PSD_446",
+      "Order": 1,
+      "Motion": "肚链"
+    },
+    {
+      "Name": "2肚链",
+      "Id": "D_PSD_445",
+      "Order": 1,
+      "Motion": "肚链"
+    },
+    {
+      "Name": "3肚链",
+      "Id": "D_PSD_444",
+      "Order": 1,
+      "Motion": "肚链"
+    },
+    {
+      "Name": "4肚链",
+      "Id": "D_PSD_442",
+      "Order": 1,
+      "Motion": "肚链"
+    },
+    {
+      "Name": "帽子",
+      "Id": "D_PSD_495",
+      "Order": 2,
+      "Motion": "帽子"
+    }
+  ],
+  "Options": {
+    "TexFixed": true
+  }
+}

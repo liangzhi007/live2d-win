@@ -1,0 +1,12 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.01,
+  "FadeOutTime": 0.02,
+  "Parameters": [
+    {
+      "Id": "PARAM_EyeType2",
+      "Value": -1.0,
+      "Blend": "Add"
+    }
+  ]
+}

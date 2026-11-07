@@ -1,0 +1,12 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.0,
+  "FadeOutTime": 0.01,
+  "Parameters": [
+    {
+      "Id": "PARAM_XIANQUNZI",
+      "Value": 1.0,
+      "Blend": "Add"
+    }
+  ]
+}

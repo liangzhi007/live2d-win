@@ -1,0 +1,57 @@
+{
+  "Type": "Live2D Expression",
+  "FadeInTime": 0.01,
+  "FadeOutTime": 0.01,
+  "Parameters": [
+    {
+      "Id": "PARAM_EYE_L_OPEN",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_L_SMILE",
+      "Value": -0.34,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_R_OPEN",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EYE_R_SMILE",
+      "Value": -0.61,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_EyeballSmall",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_BROW_L_X",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_BROW_L_Y",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_BROW_R_X",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_BROW_R_Y",
+      "Value": -1.0,
+      "Blend": "Add"
+    },
+    {
+      "Id": "PARAM_Cheek2",
+      "Value": -1.0,
+      "Blend": "Add"
+    }
+  ]
+}

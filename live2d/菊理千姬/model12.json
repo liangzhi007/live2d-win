@@ -1,0 +1,225 @@
+{
+  "Version": 3,
+  "Type": 0,
+  "FileReferences": {
+    "Moc": "Moc_12.moc3",
+    "Textures": [
+      "Textures_0_12.png"
+    ],
+    "Physics": "Physics_12.json",
+    "PhysicsV2": {
+      "File": "Physics_12.json"
+    },
+    "Motions": {
+      "领带": [
+        {
+          "File": "Motions_领带_0_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "胸": [
+        {
+          "File": "Motions_胸_0_File_12.json",
+          "Priority": 4
+        },
+        {
+          "File": "Motions_胸_1_File_12.json",
+          "Priority": 4
+        },
+        {
+          "File": "Motions_胸_2_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "摸头时": [
+        {
+          "File": "Motions_摸头时_0_File_12.json",
+          "FileLoop": true,
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "未摸头": [
+        {
+          "File": "Motions_未摸头_0_File_12.json",
+          "Priority": 4,
+          "Interruptable": true
+        }
+      ],
+      "完成摸头": [
+        {
+          "File": "Motions_完成摸头_0_File_12.json",
+          "Priority": 5
+        },
+        {
+          "File": "Motions_完成摸头_1_File_12.json",
+          "Priority": 5
+        }
+      ],
+      "肚子": [
+        {
+          "File": "Motions_肚子_0_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "Leave10_20_30": [
+        {
+          "File": "Motions_Leave10_20_30_0_File_12.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_Leave10_20_30_1_File_12.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_Leave10_20_30_2_File_12.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_完成摸头_1_File_12.json",
+          "Priority": 3
+        },
+        {
+          "File": "Motions_领带_0_File_12.json",
+          "Priority": 3
+        }
+      ],
+      "Start": [
+        {
+          "File": "Motions_Leave10_20_30_2_File_12.json",
+          "Priority": 9
+        }
+      ],
+      "1": [
+        {
+          "File": "Motions_1_0_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "2": [
+        {
+          "File": "Motions_2_0_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "3": [
+        {
+          "File": "Motions_3_0_File_12.json",
+          "Priority": 4
+        }
+      ],
+      "Idle": [
+        {
+          "File": "Motions_Idle_0_File_12.json",
+          "FileLoop": true,
+          "Priority": 2,
+          "Interruptable": true
+        }
+      ],
+      "掀领带时": [
+        {
+          "File": "Motions_掀领带时_0_File_12.json",
+          "FileLoop": true,
+          "Priority": 2,
+          "Interruptable": true
+        }
+      ],
+      "掀裙子后": [
+        {
+          "File": "Motions_掀裙子后_0_File_12.json",
+          "Priority": 5
+        }
+      ],
+      "腿": [
+        {
+          "File": "Motions_腿_0_File_12.json",
+          "Priority": 4
+        }
+      ]
+    }
+  },
+  "HitAreas": [
+    {
+      "Name": "右胸",
+      "Id": "D_PSD_26",
+      "Motion": "胸"
+    },
+    {
+      "Name": "左胸",
+      "Id": "D_PSD_25",
+      "Motion": "胸"
+    },
+    {
+      "Name": "摸头",
+      "Id": "D_PSD_75",
+      "Motion": "完成摸头",
+      "EnterMtn": "摸头时",
+      "ExitMtn": "未摸头"
+    },
+    {
+      "Name": "肚子",
+      "Id": "D_PSD_22",
+      "Motion": "肚子"
+    },
+    {
+      "Name": "裙子",
+      "Id": "D_PSD_07",
+      "Motion": "掀裙子后",
+      "EnterMtn": "掀领带时",
+      "ExitMtn": "Idle"
+    },
+    {
+      "Name": "3",
+      "Id": "D_PSD_01",
+      "Motion": "3"
+    },
+    {
+      "Name": "1",
+      "Id": "D_PSD_02",
+      "Motion": "1"
+    },
+    {
+      "Name": "2",
+      "Id": "D_PSD_00",
+      "Motion": "2"
+    },
+    {
+      "Name": "右腿",
+      "Id": "D_PSD_05",
+      "Motion": "腿"
+    },
+    {
+      "Name": "左腿",
+      "Id": "D_PSD_03",
+      "Motion": "腿"
+    },
+    {
+      "Name": "D_PSD_394",
+      "Id": "D_PSD_394",
+      "Order": 1
+    },
+    {
+      "Name": "D_PSD_393",
+      "Id": "D_PSD_393",
+      "Order": 1
+    },
+    {
+      "Name": "D_PSD_389",
+      "Id": "D_PSD_389",
+      "Order": 1
+    },
+    {
+      "Name": "D_PSD_388",
+      "Id": "D_PSD_388",
+      "Order": 1
+    },
+    {
+      "Name": "D_PSD_387",
+      "Id": "D_PSD_387",
+      "Order": 1
+    }
+  ],
+  "Options": {
+    "TexFixed": true
+  }
+}
