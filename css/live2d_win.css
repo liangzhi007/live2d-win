@@ -1,0 +1,270 @@
+/* =============================================================================
+ * live2d_win.css —— #App 小窗样式（由 live2d_win.js 使用，不要单独引用别处）
+ *
+ * 尺寸/层级这些和 JS 共用的数值全部走 CSS 变量，变量由 live2d_win.js 的
+ * CONFIG 写到 :root 上（见 JS 的 applyCssVars），所以改 CONFIG 就能改这里，
+ * 两边不会各写一套数字打架。变量都带了默认值，直接打开本文件也能看懂。
+ * ============================================================================= */
+
+:root {
+  --app-size: 100px;            /* #App 边长，运行时由 JS 按视口面积 × CONFIG.sizeRatio 覆盖 */
+  --app-btn-size: 30px;         /* 菜单按钮的边长（只有图标，正方形） */
+  --app-icon-size: 18px;        /* 图标字号：SVG 是 1em，跟着字号走 */
+  --app-gap: 4px;               /* 菜单按钮间距 */
+  --app-radius: 10px;
+  --tip-radius: 8px;            /* 悬浮提示框的圆角，嫌不够圆就调大 */
+  --tip-z: 2147483647;          /* 提示框层级：比 ghost“关闭”键还高，穿透模式下也压得住 */
+  --app-list-max: 40vh;         /* 模型列表最高多高，超出内部滚动；由 JS 的 CONFIG.modelListMax 覆盖 */
+  --app-z: 2147483000;          /* 正常模式层级（置顶） */
+  --app-pt-z: -1;               /* 穿透模式层级（压到页面内容底下） */
+  --ghost-z: 2147483646;        /* 穿透模式下“关闭”按钮层级，保证仍可点 */
+  --app-bg: rgba(51, 51, 51, .78);
+  --app-menu-bg: rgba(51, 51, 51, .86);
+  --app-text: #ddd;
+}
+
+/* ------------------------------- 小窗本体 ------------------------------- */
+/* 无边框：#App 就是一块 --app-size 见方的透明容器，看得见的是里面的立绘 */
+#App {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  width: var(--app-size);
+  height: var(--app-size);
+  border-radius: var(--app-radius);
+  z-index: var(--app-z);
+  font: 12px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+/* 本体铺满 #App（没有边框，所以就是整个 --app-size），圆角跟着外层走 */
+#App .app__body {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-bg);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+  transition: background .15s;
+}
+
+/* 模型加载成功后 JS 会加 is-model：背景透明、去掉占位底色 */
+#App .app__body.is-model {
+  background: transparent;
+  box-shadow: none;
+}
+
+#App .app__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#App .app__label {
+  font-size: 10px;
+  opacity: .85;
+}
+
+/* ----------------------------- 顶部面板：菜单栏 ----------------------------- */
+#App .app__panel {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* 不做淡入淡出：鼠标一离开菜单栏就立刻收（JS 那边也不再有任何延时） */
+}
+
+#App.is-near .app__panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ----------------------------- 模型列表（点“模型”才出现）----------------------------- */
+/* 和菜单栏同在 .app__panel 里、排在菜单栏上面。面板是“底部对齐”的（bottom: 100% + 6px），
+ * 所以列表再长也只是往上长：菜单栏位置不动，#App 和里面的立绘更不会被挤到。 */
+#App .app__list {
+  display: none;
+  box-sizing: border-box;
+  width: 240px;
+  max-width: calc(100vw - 16px);
+  max-height: var(--app-list-max, 40vh); /* 高度上限由 JS 从 CONFIG.modelListMax 写过来 */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  border-radius: var(--app-radius);
+  background: var(--app-menu-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+}
+
+#App .app__list.is-open {
+  display: block;
+}
+
+#App .app__list__head {
+  padding: 2px 4px 6px;
+  font-size: 11px;
+  color: #b9c2cf;
+}
+
+#App .app__list__msg {
+  padding: 2px 4px;
+  font-size: 11px;
+  color: #ffcf6b;
+}
+
+/* 一行一个文件夹。不做“选中高亮”（和菜单按钮一致），当前用的是哪一个写在上面那行标题里 */
+#App .app__opt {
+  display: block;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--app-text);
+  font: 12px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+#App .app__opt:hover {
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+}
+
+#App .app__menu {
+  display: flex;
+  gap: var(--app-gap);
+  padding: 4px;
+  border-radius: var(--app-radius);
+  background: var(--app-menu-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+}
+
+/* 图标按钮：里面只有图标，提示文字走下面那个 #AppTip（JS 的 fillButton 只写 data-tip），
+ * 所以按钮永远是正方形，鼠标停上去也不会变宽。 */
+#App .app__item,
+#AppGhostClose {
+  box-sizing: border-box;
+  height: var(--app-btn-size);
+  min-width: var(--app-btn-size); /* 图标 + 左右 6px 内边距本来就凑成这个宽度 */
+  padding: 0 6px;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  color: var(--app-text);
+  font: 12px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+  cursor: pointer;
+  transition: background .12s, color .12s, opacity .12s;
+}
+
+#App .app__item:hover,
+#AppGhostClose:hover {
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+}
+
+/* 图标容器：SVG 是 1em，所以只改 --app-icon-size 就能缩放图标 */
+#App .app__icon,
+#AppGhostClose .app__icon {
+  font-size: var(--app-icon-size);
+  line-height: 0;
+  display: flex;
+}
+
+#App .app__item svg,
+#AppGhostClose svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+
+/* 鼠标停在“移动”按钮上就是十字四向箭头，按住它可直接拖动小窗 */
+#App .app__item.is-move {
+  cursor: all-scroll;
+}
+
+/* ------------------------------- 悬浮提示 ------------------------------- */
+/* 代替浏览器原生 title：鼠标一停上去就出现（没有任何延时），而且能做圆角、配色。
+ * 文字和位置由 JS 的 showTip() 现算（见 live2d_win.js【4.1】），全站就这一个小盒子。
+ * 收着的时候用 visibility 而不是 display —— 它还占着布局，JS 才量得到宽高、先算好位置再显示。 */
+#AppTip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: var(--tip-z);
+  padding: 3px 8px;
+  border-radius: var(--tip-radius);
+  background: var(--app-menu-bg);
+  color: #fff;
+  font: 12px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* 不吃鼠标，免得提示框挡住下面立绘的点击 */
+}
+
+#AppTip.is-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ------------------------------- 穿透模式 ------------------------------- */
+/* 窗口外观完全不变：只降层级 + 不收鼠标事件。
+ * 菜单栏被隐藏，换成挂在 body 下的“关闭”按钮（挂 body 的原因见 JS【6.2】），
+ * 它和菜单栏一样平时收着，只有鼠标靠近这块浮层自己才浮出来（is-show + is-near 两级）。 */
+#App.is-passthrough {
+  z-index: var(--app-pt-z);
+  pointer-events: none;
+}
+
+#App.is-passthrough .app__panel {
+  display: none;
+}
+
+#AppGhostClose {
+  position: fixed;
+  display: none;               /* 非穿透模式：完全不存在 */
+  background: var(--app-menu-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+  z-index: var(--ghost-z);
+}
+
+/* 穿透模式：位置已经摆好，但收着不显示也不吃鼠标 */
+#AppGhostClose.is-show {
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 鼠标靠近小窗（JS 判定后加 is-near）才真正出现 */
+#AppGhostClose.is-show.is-near {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* 日志只显示在浏览器控制台（JS 的 log()），页面上不再有日志面板，所以这里没有 #AppLog 的样式 */

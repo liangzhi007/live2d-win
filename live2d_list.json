@@ -1,0 +1,1969 @@
+{
+  "_说明": [
+    "这是小窗“模型/服装”两个列表的静态清单，由 node tools/scan-live2d.mjs 扫描生成，别手改（改完下次重扫就没了）。",
+    "完整地址 = pathBase + dir + file。例：pathBase=\"live2d/\"、dir=\"菊理千姬/\"、file=\"model3.json\" → live2d/菊理千姬/model3.json。",
+    "换到别的服务器只改 pathBase 一处：可以写相对页面的路径，也可以写 https://xxx/live2d/ 这种绝对地址（末尾的 / 别丢）。",
+    "files = 点“模型”时依次尝试的编号（从大到小，带同名 moc 的优先）；cloths = 点“服装”看到的列表（编号从小到大）。",
+    "cloths[].moc=false 表示这个编号没有对应的 Moc_N.moc3，多半加载不了，列表里会标出来。"
+  ],
+  "pathBase": "live2d/",
+  "models": [
+    {
+      "name": "阿妮娅",
+      "dir": "阿妮娅/",
+      "files": [
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "艾琳",
+      "dir": "艾琳/",
+      "files": [
+        "17",
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        },
+        {
+          "n": "17",
+          "file": "model17.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "格兰妮",
+      "dir": "格兰妮/",
+      "files": [
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "菊理千姬",
+      "dir": "菊理千姬/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "卡萝",
+      "dir": "卡萝/",
+      "files": [
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "丽达",
+      "dir": "丽达/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "洛可可",
+      "dir": "洛可可/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "沐恩",
+      "dir": "沐恩/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "时无瑕",
+      "dir": "时无瑕/",
+      "files": [
+        "20",
+        "19",
+        "18",
+        "17",
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        },
+        {
+          "n": "17",
+          "file": "model17.json",
+          "moc": true
+        },
+        {
+          "n": "18",
+          "file": "model18.json",
+          "moc": true
+        },
+        {
+          "n": "19",
+          "file": "model19.json",
+          "moc": true
+        },
+        {
+          "n": "20",
+          "file": "model20.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "时无忧",
+      "dir": "时无忧/",
+      "files": [
+        "19",
+        "18",
+        "17",
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        },
+        {
+          "n": "17",
+          "file": "model17.json",
+          "moc": true
+        },
+        {
+          "n": "18",
+          "file": "model18.json",
+          "moc": true
+        },
+        {
+          "n": "19",
+          "file": "model19.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/阿尼娅",
+      "dir": "誓约/阿尼娅/",
+      "files": [
+        "13"
+      ],
+      "cloths": [
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/艾琳",
+      "dir": "誓约/艾琳/",
+      "files": [
+        "6"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/高奈利亚",
+      "dir": "誓约/高奈利亚/",
+      "files": [
+        "1"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/格兰妮",
+      "dir": "誓约/格兰妮/",
+      "files": [
+        "7"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/菊理千姬",
+      "dir": "誓约/菊理千姬/",
+      "files": [
+        "5"
+      ],
+      "cloths": [
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/丽达",
+      "dir": "誓约/丽达/",
+      "files": [
+        "10"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": false
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": false
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": false
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/洛可可",
+      "dir": "誓约/洛可可/",
+      "files": [
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/沐恩",
+      "dir": "誓约/沐恩/",
+      "files": [
+        "3"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/聂诗柔",
+      "dir": "誓约/聂诗柔/",
+      "files": [
+        "12"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": false
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": false
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": false
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": false
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": false
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/时无瑕",
+      "dir": "誓约/时无瑕/",
+      "files": [
+        "8"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": false
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/时无忧",
+      "dir": "誓约/时无忧/",
+      "files": [
+        "9"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": false
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": false
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/苏小真",
+      "dir": "誓约/苏小真/",
+      "files": [
+        "4"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/伊珂丝",
+      "dir": "誓约/伊珂丝/",
+      "files": [
+        "11"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": false
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": false
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": false
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": false
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": false
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": false
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": false
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": false
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": false
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "誓约/朱诺",
+      "dir": "誓约/朱诺/",
+      "files": [
+        "2"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": false
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": false
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "苏小真",
+      "dir": "苏小真/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "唯",
+      "dir": "唯/",
+      "files": [
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "伊珂丝",
+      "dir": "伊珂丝/",
+      "files": [
+        "16",
+        "15",
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        },
+        {
+          "n": "15",
+          "file": "model15.json",
+          "moc": true
+        },
+        {
+          "n": "16",
+          "file": "model16.json",
+          "moc": true
+        }
+      ]
+    },
+    {
+      "name": "朱诺",
+      "dir": "朱诺/",
+      "files": [
+        "14",
+        "13",
+        "12",
+        "11",
+        "10",
+        "9",
+        "8",
+        "7",
+        "6",
+        "5",
+        "4",
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "cloths": [
+        {
+          "n": "0",
+          "file": "model0.json",
+          "moc": true
+        },
+        {
+          "n": "1",
+          "file": "model1.json",
+          "moc": true
+        },
+        {
+          "n": "2",
+          "file": "model2.json",
+          "moc": true
+        },
+        {
+          "n": "3",
+          "file": "model3.json",
+          "moc": true
+        },
+        {
+          "n": "4",
+          "file": "model4.json",
+          "moc": true
+        },
+        {
+          "n": "5",
+          "file": "model5.json",
+          "moc": true
+        },
+        {
+          "n": "6",
+          "file": "model6.json",
+          "moc": true
+        },
+        {
+          "n": "7",
+          "file": "model7.json",
+          "moc": true
+        },
+        {
+          "n": "8",
+          "file": "model8.json",
+          "moc": true
+        },
+        {
+          "n": "9",
+          "file": "model9.json",
+          "moc": true
+        },
+        {
+          "n": "10",
+          "file": "model10.json",
+          "moc": true
+        },
+        {
+          "n": "11",
+          "file": "model11.json",
+          "moc": true
+        },
+        {
+          "n": "12",
+          "file": "model12.json",
+          "moc": true
+        },
+        {
+          "n": "13",
+          "file": "model13.json",
+          "moc": true
+        },
+        {
+          "n": "14",
+          "file": "model14.json",
+          "moc": true
+        }
+      ]
+    }
+  ]
+}
