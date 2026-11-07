@@ -3,14 +3,14 @@
  *
  * 分工：本文件只管“界面”（小窗 DOM、菜单栏、模型/服装列表、拖动、置底穿透、日志），
  *      模型的导入和交互在同目录的 live2d_model.js 里（全局对象 window.L2D，必须早于本文件执行）。
- * 谁来载入这些文件：同目录的 js/live2d_win.loader.js（插入式启动器，手机浏览器访问时它整个跳过）。
+ * 谁来载入这两个文件：同目录的 live2d_win.loader.js（插入式启动器，手机浏览器访问时它整个跳过）。
  *
  * 结构（DOM 由本文件注入，样式在 ../css/live2d_win.css 里，同样由 loader 插入）：
  *   #App                 左下角小窗，边长随屏幕缩放（面积 ≈ 视口的 CONFIG.sizeRatio，默认 1/10 屏）
  *     ├ .app__body       本体，里面是 .app__canvas（PIXI 画布）+ Live2D 模型，和 div 一样大
  *     └ .app__panel      顶部悬浮面板（平时隐藏；只有鼠标靠近“这一条”才出现，停在立绘上不会展开）
- *         ├ .app__list   列表区（点“模型”出模型列表、点“服装”出同目录的服装列表，两份内容都来自
- *         │              CONFIG.modelList 那个静态清单，见【6.3】）
+ *         ├ .app__list   列表区（点“模型”出模型列表、点“服装”出同目录的服装列表，两份内容都是
+ *         │              现场向 OpenList 分享目录列出来的，见【6.3】）
  *         └ .app__menu   菜单栏：模型 / 服装 / 声音 / 显示可点击区域 / 移动 / 关闭
  *                        每个按钮 = 一个 .app__icon 图标 + 一句提示文字
  *                        提示走页面自己的 tooltip（#AppTip，见【4.1】）：鼠标一停上去就出现，圆角可控
@@ -18,8 +18,8 @@
  *   #AppTip              上面那些提示文字用的那一个小盒子，全局只有一个，位置由 JS 算
  *                        （日志只显示在浏览器控制台，页面上不再有日志面板）
  *
- * 想调手感/时间/尺寸   → 只看【1. 配置区】（默认模型改 CONFIG.modelPath，换模型目录改清单里的 pathBase）
- * 想增删模型/服装      → 不用改代码：项目根跑 `node tools/scan-live2d.mjs` 重生成 live2d_list.json
+ * 想调手感/时间/尺寸   → 只看【1. 配置区】（默认模型改 CONFIG.modelPath，换模型目录改 CONFIG.modelRoot）
+ * 想增删模型/服装      → 不用改代码：文件放进服务器目录就行，点小窗“模型”会现扫（同一页面里想立刻看到新增：live2dWin.loadModelList(true)）
  * 想调模型贴合/滑动幅度/动作优先级 → 改 live2d_model.js 的 CONFIG
  * 想加/删菜单按钮      → 改【2. 菜单定义】的 ICON + MENU_ITEMS +【6. 按钮行为分发】加一个 case
  * 想改外观（配色/圆角/按钮和图标大小）→ 改 live2d_win.css
@@ -31,10 +31,14 @@
   /* ============================ 1. 配置区 ============================ */
   var CONFIG = {
     sizeRatio: 0.11,        // 小窗面积占视口面积的比例（0.1 = 十分之一屏），窗口缩放自动跟着变大变小
-    modelList: 'live2d_list.json', // “模型/服装”列表用的静态清单（node tools/scan-live2d.mjs 生成，
-                             // 清单最前面有 pathBase = 模型目录在服务器上的位置，换服务器只改那一处）
+    modelRoot: 'http://192.168.1.20:5244/@s/38nasKch/live2d-win/live2d', // 模型根目录在 OpenList 上的分享地址（@s = 浏览器点进去能看到文件夹那一层）。
+                             // 文件地址由它换出来：路径里的 @s 换成 sd → …/sd/38nasKch/live2d/菊理千姬/model3.json。
+                             // ★ 换服务器、换分享只改这一处；留空就按 modelSub 自动推断（见【6.3】autoModelRoot）。
+    modelSub: 'live2d',      // 只在 modelRoot 留空时用：从页面/脚本地址推出分享根（…/@s/<token>）后，接在它后面的模型目录名
+    modelScanDepth: 3,       // “模型”列表从 modelRoot 往下最多钻几层（1 = 只看这一层）：誓约/朱诺 就在第 3 层
+    modelScanMax: 6,         // 扫描时同时开几个列目录请求（扫到几个就先显示几个，不用等全部扫完）
     modelPath: '菊理千姬/model3.json', // 打开页面时先加载这个；之后点“模型”按钮换。
-                             // ★ 写的是 pathBase 后面那一段：清单里 pathBase='live2d/' 时就是 live2d/菊理千姬/model3.json
+                             // ★ 写的是 modelRoot 后面那一段：…/@s/38nasKch/live2d/菊理千姬/model3.json
     modelTryMax: 4,          // “模型”列表选文件夹时，同目录多个 modelN.json 从编号大的开始试，最多试几个
     modelListMax: '40vh',    // 模型列表最多占多高，超出就内部滚动（免得顶出屏幕）
     nearDistance: 72,        // 鼠标距菜单栏（顶部那块面板）多少像素内 → 展开；停在立绘里不算
@@ -66,7 +70,7 @@
 
   var MENU_ITEMS = [
     { key: 'model', label: '模型', icon: ICON.model },
-    { key: 'cloth', label: '服装', icon: ICON.cloth }, // 列出当前模型在清单里那一条的 cloths（model*.json），点一下换装
+    { key: 'cloth', label: '服装', icon: ICON.cloth }, // 列出当前模型那个目录里的 model*.json（一套 = 一件服装），点一下换装
     { key: 'voice', label: '声音', icon: ICON.voice },
     { key: 'hit', label: '显示可点击区域', icon: ICON.hit }, // 一键在立绘上画出所有命中区域的边框
     { key: 'move', label: '移动', icon: ICON.move },  // 按住这个按钮可直接拖动小窗
@@ -235,7 +239,7 @@
     my: -9999,
     ghostDx: 0,         // ghost“关闭”键相对 #App 左上角的偏移，见 rememberGhostAnchor
     ghostDy: -44,
-    modelPath: '',      // 当前模型的文件路径 / 显示名（列表标题用）
+    modelPath: '',      // 当前模型的完整取文件地址（…/sd/<token>/live2d/菊理千姬/model3.json）
     modelName: '',      // 显示名：换模型时是文件夹名，换服装时是「文件夹 · 服装 N」
     switching: false,   // 正在换模型（连点时只处理第一次）
   };
@@ -483,97 +487,356 @@
     log('双击关闭：小窗已移除（刷新页面可恢复）', null, 'warn');
   }
 
-  /* ---------- 6.3 模型 / 服装列表：内容来自静态清单 live2d_list.json，点一下就换 ---------- */
-  /* 清单由项目根的 tools/scan-live2d.mjs 扫目录生成（页面不再依赖服务器的目录列表功能）：
-   *   清单开头是 pathBase（模型目录在服务器上的位置，换服务器只改它），
-   *   下面 models[] 一条 = 一个模型目录：{ name, dir, files:[modelN 编号从大到小], cloths:[{ n, file, moc }] }。
-   *   “模型”列表拿 name + dir，“服装”列表拿当前模型那一条的 cloths；完整地址 = pathBase + dir + file。
+  /* ---------- 6.3 模型 / 服装列表：现场向 OpenList 的分享目录列，点一下就换 ---------- */
+  /* 同一个分享有两种地址，token 一样、只有中间那一节不一样（@s ↔ sd，下面 swapShare 负责换算）：
+   *   列目录（分享页）  http://host:5244/@s/38nasKch/live2d/菊理千姬   ← CONFIG.modelRoot 写的就是这一种
+   *   取文件（真下载）  http://host:5244/sd/38nasKch/live2d/菊理千姬/model3.json
+   * 列目录发 POST <站点>/api/fs/list，body 里 path 用第一种的路径部分。两个坑，改的时候别踩：
+   *   1) path 必须是解码后的原文：写成 %E8%8F%8A… 会报 “object not found”，而 location.pathname 恰恰是编码过的，所以要 decodePath；
+   *   2) 分享目录匿名就能列，但整站关了“游客”后，不带 /@s/<token> 的普通路径一律 401 —— 所以 path 一直带着分享前缀。
+   * 扫描规则和项目根 tools/scan-live2d.mjs 一一对应（改一边记得改另一边）：
+   *   1) 从 modelRoot 往下最多钻 CONFIG.modelScanDepth 层，哪个目录里有 model*.json 就把它当成一个模型目录，不再往深里找；
+   *   2) 点“模型”时先试哪些 modelN.json：有同名 Moc_N.moc3 的优先（从大到小），一个都对不上就全按编号从大到小试（官方样例那种走这条）；
+   *   3) 点“服装”看到的是该目录下所有 model*.json（编号从小到大），没对应 moc 的标一句提示，照样能点；
+   *   4) 列表按中文拼音排（localeCompare + zh-Hans-CN）。
+   * 列过的目录缓存在 dirCache：扫过的角色再点“服装”不会重新请求；服务器上新放了模型，用 live2dWin.loadModelList(true) 作废缓存重扫。
    * 列表框是同一个（.app__list），用 listMode 区分现在显示的是模型还是服装，所以两个按钮各点一次会互相替换。 */
-  var list = {                    // 静态清单的读取状态
-    pathBase: '', models: [],     // models[] 里每条已经补上 path（目录全路径）和 cloths[].path/label
+  var modelRoot = parseModelRoot();      // 模型根目录换算出来的那几种地址，字段说明见 parseModelRoot
+  var dirCache = {};                // 分享内的目录路径（末尾不带 /）→ Promise<列好的目录信息>
+  var list = {                      // “模型”列表的扫描状态
+    models: [],                               // models[] 一条 = { label, path, files, cloths }；path 是能直接取文件的目录地址（末尾带 /）
     running: false, done: false, error: '', promise: null,
+    scanned: 0, queued: 0,          // 已列了几个目录 / 还有几个排在队列里（列表末尾那句进度用）
   };
-  var cloth = {                   // “服装”列表当前显示的那几条（换模型时从 list.models 里挑一条）
-    dir: '', entries: [],
+  var cloth = {                     // “服装”列表当前显示的那几条（按当前模型所在目录现列）
+    dir: '', entries: [], loading: false, error: '',
   };
-  var listMode = 'model';         // 列表框当前显示的模式：'model' | 'cloth'
+  var listMode = 'model';           // 列表框当前显示的模式：'model' | 'cloth'
 
   /**
-   * 读一次静态清单，把每条都补成“拿来就能用”的样子（路径直接拼好，服装 label 也在这里算）。
-   * 只发一个请求，读过了（不管成没成）就不再重读；想强制重读用 live2dWin.loadModelList(true)。
-   * @param {boolean} [force] true = 忽略缓存再读一次（改了清单想在同一个页面里看到新内容时用）
-   * @returns {Promise<Array>} 补全后的 models，同时写进 list 并重画列表
+   * 把 CONFIG.modelRoot（留空时是 autoModelRoot 推出来的那条）拆成后面所有地方要用的地址。
+   * @returns {{raw:string, origin:string, share:string, filePath:string, fileBase:string, api:string, name:string}}
+   *   raw      配置里原来那条地址（日志里好认）
+   *   origin   站点根，如 http://192.168.1.20:5244
+   *   share    模型根在分享里的路径，如 /@s/38nasKch/live2d（解码过的原文，末尾不带 /）→ 列目录就用它
+   *   filePath share 的取文件写法，如 /sd/38nasKch/live2d
+   *   fileBase origin + filePath + '/'，模型 json/moc/贴图全部拼在这个后面
+   *   api      列目录接口，如 http://192.168.1.20:5244/api/fs/list
+   *   name     最后一节的名字（如 live2d），模型根自己也是一条模型时列表里显示它
    */
-  function loadModelList(force) {
+  function parseModelRoot() {
+    var raw = (CONFIG.modelRoot || '').trim() || autoModelRoot();
+    var a = document.createElement('a');              // 借浏览器拆地址：绝对/相对/带中文的都能吃
+    a.href = raw || location.href;
+    var share = decodePath(a.pathname).replace(/\/+$/, '');
+    var origin = a.origin || (a.protocol + '//' + a.host);
+    var filePath = swapShare(share, '@s', 'sd');
+    var base = (window.OPENLIST_CONFIG && window.OPENLIST_CONFIG.base_path) || '';
+    return {
+      raw: raw,
+      origin: origin,
+      share: share,
+      filePath: filePath,
+      fileBase: origin + filePath + '/',
+      api: origin + (base === '/' ? '' : base) + '/api/fs/list',
+      name: share.split('/').pop() || '模型',
+    };
+  }
+
+  /**
+   * CONFIG.modelRoot 留空时的兜底：从当前页面地址或本脚本自己的地址里认出分享 token，再接上 CONFIG.modelSub。
+   * @returns {string} 形如 http://192.168.1.20:5244/@s/38nasKch/live2d；认不出分享就回空串
+   */
+  function autoModelRoot() {
+    var share = shareRootOf(location.pathname) || shareRootOf(scriptPath());
+    if (!share) return '';
+    return location.origin + share + (CONFIG.modelSub ? '/' + CONFIG.modelSub : '');
+  }
+
+  /**
+   * 从一条路径里截出「分享根」那两节（/@s/<token>）；sd 写法一律换成 @s。
+   * @param {string} pathname 如 /sd/38nasKch/openlist/js/live2d_win.js
+   * @returns {string} 如 /@s/38nasKch；不是分享地址就回空串
+   */
+  function shareRootOf(pathname) {
+    var parts = decodePath(pathname || '').split('/');
+    for (var i = 1; i < parts.length; i++) {
+      if (parts[i] === '@s' || parts[i] === 'sd') {
+        parts[i] = '@s';
+        return parts.slice(0, i + 2).join('/');       // @s + 后面那一节 token
+      }
+    }
+    return '';
+  }
+
+  /** 本脚本（live2d_win.js）自己在服务器上的路径，页面地址不是分享时用它兜底 */
+  function scriptPath() {
+    var tags = document.getElementsByTagName('script');
+    for (var i = 0; i < tags.length; i++) {
+      if (/live2d_win\.js(\?|$)/.test(tags[i].src || '')) {
+        var a = document.createElement('a');
+        a.href = tags[i].src;
+        return a.pathname;
+      }
+    }
+    return '';
+  }
+
+  /** @s（列目录）和 sd（取文件）是同一个 token 的两种写法，这里按段换掉第一个碰到的 */
+  function swapShare(path, from, to) {
+    var parts = (path || '').split('/');
+    for (var i = 1; i < parts.length; i++) {
+      if (parts[i] === from) { parts[i] = to; break; }
+    }
+    return parts.join('/');
+  }
+
+  /** location.pathname 那种是 %E8%8F%8A… 编码过的，fs/list 只认原文；半截 % 会让 decode 抛错，那就原样返回 */
+  function decodePath(path) {
+    try { return decodeURIComponent(path); } catch (e) { return path; }
+  }
+
+  /** 分享目录路径 → 能直接取文件的目录地址（末尾带 /） */
+  function fileBaseOf(share) {
+    return modelRoot.origin + swapShare((share || '').replace(/\/+$/, ''), '@s', 'sd') + '/';
+  }
+
+  /**
+   * 取文件用的目录地址 → 分享路径（fileBaseOf 的反向），好让“服装”能单列当前这一个目录。
+   * @param {string} fileUrl 如 …/sd/38nasKch/live2d/菊理千姬/
+   * @returns {string} 如 /@s/38nasKch/live2d/菊理千姬；不在模型根下面回空串
+   */
+  function shareOfFilePath(fileUrl) {
+    if (!fileUrl) return '';
+    var a = document.createElement('a');
+    a.href = fileUrl;
+    var path = decodePath(a.pathname).replace(/\/+$/, '');
+    if (path.indexOf(modelRoot.filePath) === 0) return swapShare(path, 'sd', '@s');
+    if (path.indexOf(modelRoot.share) === 0) return path;   // 有人直接拿 @s 地址来换模型也认
+    return '';
+  }
+
+  /**
+   * 列一个分享目录（同一个目录只发一次请求，结果留在 dirCache 里）。
+   * @param {string} share 分享内的目录路径，如 /@s/38nasKch/live2d/菊理千姬（解码后的原文，末尾 / 有没有都行）
+   * @param {boolean} [force] true = 不看缓存，并让服务器也别用它的目录缓存（refresh=true）
+   * @returns {Promise<object>} parseDirItems 的结果：{ share, fileBase, files, cloths, dirs }
+   */
+  function listShareDir(share, force) {
+    var key = (share || '').replace(/\/+$/, '');
+    if (!force && dirCache[key]) return dirCache[key];
+    var p = fetch(modelRoot.api, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        path: key, page: 1, per_page: 0, refresh: !!force,   // per_page=0 = 一次拿全，488 个文件的目录也是这样
+        password: '', sign: '', sort: '', order: 'asc',
+      }),
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; });   // 回来的不是 json（比如被换成页面）→ 当成失败，下面按 code 报错
+    }, function (err) {
+      throw new Error('请求没发出去：' + err.message);
+    }).then(function (j) {
+      if (j.code !== 200) throw new Error('code ' + (j.code || '?') + '：' + (j.message || '列目录失败'));
+      return parseDirItems(key, (j.data && j.data.content) || []);   // 空目录回来 content 是 null
+    });
+    /* 列砸了的不留在缓存里，下次点还能重试（这句 catch 只是清理，不影响调用方拿到的 p） */
+    p.catch(function () { delete dirCache[key]; });
+    dirCache[key] = p;
+    return p;
+  }
+
+  /**
+   * 把一个目录里的文件名分成“model 编号 / moc 编号 / 子目录”，并按 scan-live2d.mjs 的规则排好序。
+   * @param {string} share 这个目录的分享路径（末尾不带 /）
+   * @param {Array} items fs/list 返回的 data.content
+   * @returns {{share:string, fileBase:string, files:Array, cloths:Array, dirs:Array}}
+   */
+  function parseDirItems(share, items) {
+    var nums = [], mocs = [], dirs = [];
+    items.forEach(function (it) {
+      var m;
+      if (it.is_dir) { dirs.push(it.name); return; }
+      m = /^model(\d*)\.json$/i.exec(it.name);
+      if (m) { nums.push(m[1]); return; }                   // '' = 文件名就叫 model.json
+      m = /^moc[_-]?(\d+).*\.moc3?$/i.exec(it.name);
+      if (m) mocs.push(m[1]);
+    });
+    var hasMoc = {};
+    mocs.forEach(function (n) { hasMoc[n] = true; });
+    var files = nums.filter(function (n) { return n && hasMoc[n]; });   // 先试有同名 moc 的
+    if (!files.length) files = nums.slice();                            // 一个都对不上就全试
+    files.sort(function (a, b) { return (b | 0) - (a | 0); });
+    var base = fileBaseOf(share);
+    var cloths = nums.slice().sort(function (a, b) { return (a | 0) - (b | 0); }).map(function (n) {
+      var ok = n === '' || !!hasMoc[n];
+      return {
+        n: n,
+        moc: ok,
+        path: base + 'model' + n + '.json',
+        label: '服装 ' + (n === '' ? '（无编号）' : n) + (ok ? '' : '（没有对应 moc）'),
+      };
+    });
+    return { share: share, fileBase: base, files: files, cloths: cloths, dirs: dirs };
+  }
+
+  /** 目录信息 → “模型”列表里的一条：label 用相对模型根的那段（和原来静态清单里的 name 一样） */
+  function entryOf(info, rel) {
+    return { label: rel ? rel.replace(/\/+$/, '') : modelRoot.name, path: info.fileBase, files: info.files, cloths: info.cloths };
+  }
+
+  /** 列表按中文拼音排（和 scan-live2d.mjs 一致） */
+  function byName(a, b) { return String(a.label).localeCompare(String(b.label), 'zh-Hans-CN'); }
+
+  var renderTimer = null;   // 扫描过程中重画列表的节流计时器
+
+  /** 边扫边显示：最多每 150ms 重画一次，省得几十个目录各刷一遍 */
+  function renderSoon() {
+    if (listMode !== 'model' || renderTimer) return;
+    renderTimer = setTimeout(function () {
+      renderTimer = null;
+      renderModelList();
+    }, 150);
+  }
+
+  /**
+   * 从模型根往下扫一遍，把带 model*.json 的目录收成“模型”列表。
+   * 只有点“模型”按钮时才会跑到这儿，页面打开不预先扫描（顺带扫一次是几十个请求）。
+   * @param {boolean} [force] true = 连目录缓存一起作废重扫（服务器上新放了模型时用）
+   * @returns {Promise<Array>} list.models
+   */
+  function scanModelList(force) {
     if (list.running) return list.promise;
     if (list.done && !force) return Promise.resolve(list.models);
+    if (force) dirCache = {};
     list.running = true;
     list.error = '';
-    list.promise = fetch(CONFIG.modelList).then(function (res) {
-      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + CONFIG.modelList + '）');
-      return res.json();
-    }, function (err) {
-      throw new Error('读不到清单 ' + CONFIG.modelList + '：' + err.message);
-    }).then(function (data) {
-      var base = data.pathBase || '';
-      list.pathBase = base;
-      list.models = (data.models || []).map(function (m) {
-        var dir = base + (m.dir || '');
-        return {
-          label: m.name,
-          path: dir,                                   // 目录，末尾带 /
-          files: m.files || [],
-          cloths: (m.cloths || []).map(function (c) {
-            return {
-              n: c.n,
-              moc: c.moc !== false,
-              path: dir + c.file,
-              label: '服装 ' + (c.n === '' ? '（无编号）' : c.n)
-                   + (c.n && c.moc === false ? '（没有对应 moc）' : ''),
-            };
-          }),
-        };
+    list.scanned = 0;
+    list.queued = 0;
+    list.models = [];
+
+    if (!shareRootOf(modelRoot.share)) {
+      list.error = 'CONFIG.modelRoot 没填，也没从页面地址里认出分享目录（…/@s/<token>/…）';
+      list.running = false;
+      list.done = true;
+      /* ▼ 日志调用点 */
+      log('扫描模型目录：' + list.error, null, 'error');
+      return Promise.resolve(list.models);
+    }
+
+    var queue = [{ share: modelRoot.share, rel: '', depth: 1 }];
+    var found = [];
+
+    /* 一格的活：列一个目录 → 有 model*.json 就收进列表（不再往深里找），否则把子目录排进队列继续钻 */
+    function work(job) {
+      return listShareDir(job.share, force).then(function (info) {
+        list.scanned++;
+        if (info.files.length) {
+          found.push(entryOf(info, job.rel));
+          found.sort(byName);
+          list.models = found;
+          renderSoon();
+        } else if (job.depth < CONFIG.modelScanDepth && info.dirs.length) {
+          info.dirs.forEach(function (name) {
+            queue.push({ share: job.share + '/' + name, rel: job.rel + name + '/', depth: job.depth + 1 });
+          });
+        }
+        return pump();
+      }, function (err) {
+        list.scanned++;
+        if (!list.error) list.error = job.share + ' → ' + err.message;   // 单个目录列不开就跳过它，记下第一条错误别断整轮
+        return pump();
       });
+    }
+
+    /* 从队列头取一个接着列，取空收工 —— 靠这个递归把 CONFIG.modelScanMax 条流水线跑满 */
+    function pump() {
+      var job = queue.shift();
+      if (!job) return Promise.resolve();
+      list.queued = queue.length;
+      return work(job);
+    }
+
+    var pool = [];
+    for (var i = 0; i < Math.max(1, CONFIG.modelScanMax); i++) pool.push(pump());
+
+    list.promise = Promise.all(pool).then(function () {
+      list.models = found.sort(byName);
     }, function (err) {
-      list.error = err.message;
-      list.pathBase = '';
-      list.models = [];
+      list.error = list.error || err.message;
     }).then(function () {
       list.running = false;
       list.done = true;
       list.promise = null;
-      pickClothDir(state.modelPath || defaultModelPath()); // 清单可能比模型先到，这里对齐一下服装那条
+      list.queued = 0;
+      pickClothDir(state.modelPath || defaultModelPath()); // 扫完了把服装那条对齐一下
       renderModelList();
       /* ▼ 日志调用点 */
-      log('读取清单 ' + CONFIG.modelList + '：' + list.models.length + ' 个模型'
-        + (list.error ? '（失败：' + list.error + '）' : '，pathBase=' + list.pathBase),
-        list.error ? null : list.models, list.error ? 'error' : 'action');
+      log('扫描 ' + modelRoot.share + '（往下 ' + CONFIG.modelScanDepth + ' 层）：列了 ' + list.scanned
+        + ' 个目录 → ' + list.models.length + ' 个模型'
+        + (list.error ? '（有目录没列开：' + list.error + '）' : ''),
+        list.models, list.error ? 'warn' : 'action');
       return list.models;
     });
     return list.promise;
   }
 
   /**
-   * 按“当前模型在哪个目录”从清单里挑出对应那一条，把它的 cloths 当成服装列表。
-   * @param {string} path 模型文件路径（model*.json）；传目录也行
+   * 按“当前模型在哪个目录”准备服装列表：扫过的直接用，没扫过就单列这一个目录（不用等整棵树扫完）。
+   * @param {string} path 模型文件地址（model*.json）；传目录也行
    * @returns {void}
    */
   function pickClothDir(path) {
     var dir = path ? path.replace(/model[^/]*\.json$/i, '') : '';
+    var changed = cloth.dir !== dir;
+    cloth.dir = dir;
+    cloth.error = '';
+    if (!changed) return;
+
     var hit = null;
     for (var i = 0; i < list.models.length; i++) {
       if (list.models[i].path === dir) { hit = list.models[i]; break; }
     }
-    var changed = cloth.dir !== dir;
-    cloth.dir = dir;
-    cloth.entries = hit ? hit.cloths : [];
-    if (!changed) return;
-    /* ▼ 日志调用点 */
-    log('服装列表：' + (dir || '（还不知道当前模型在哪个目录）')
-      + ' → ' + cloth.entries.length + ' 套' + (hit ? '' : '（清单里没有这个目录）'), cloth.entries, 'action');
+    if (hit) {
+      cloth.loading = false;
+      cloth.entries = hit.cloths;
+      /* ▼ 日志调用点 */
+      log('服装列表：' + dir + ' → ' + cloth.entries.length + ' 套（扫描时已列过）', cloth.entries, 'action');
+      renderModelList();
+      return;
+    }
+
+    cloth.entries = [];
+    var share = shareOfFilePath(dir);
+    if (!share) {
+      cloth.loading = false;
+      cloth.error = '这个目录不在模型根（' + modelRoot.share + '）下面，列不出来：' + (dir || '（还不知道当前模型在哪个目录）');
+      /* ▼ 日志调用点 */
+      log('服装列表：' + cloth.error, null, 'warn');
+      renderModelList();
+      return;
+    }
+
+    cloth.loading = true;
+    renderModelList();
+    listShareDir(share).then(function (info) {
+      cloth.loading = false;
+      if (cloth.dir !== dir) return;                 // 期间又换过模型，这份结果已经没用了
+      cloth.entries = info.cloths;
+      /* ▼ 日志调用点 */
+      log('服装列表：现列 ' + share + ' → ' + cloth.entries.length + ' 套', cloth.entries, 'action');
+      renderModelList();
+    }, function (err) {
+      cloth.loading = false;
+      if (cloth.dir !== dir) return;
+      cloth.error = share + ' → ' + err.message;
+      /* ▼ 日志调用点 */
+      log('服装列表：列目录失败：' + cloth.error, null, 'error');
+      renderModelList();
+    });
   }
 
-  /** 点“模型”按钮：展开/收起模型列表（在菜单栏上方）；第一次展开时顺带读一次清单 */
+  /** 点“模型”按钮：展开/收起模型列表（在菜单栏上方）；第一次展开时才开始扫服务器目录 */
   function toggleModelList() {
     var open = !(modelList.classList.contains('is-open') && listMode === 'model');
     listMode = 'model';
@@ -581,8 +844,8 @@
     /* ▼ 日志调用点 */
     log('菜单「模型」：' + (open ? '展开模型列表（在菜单栏上方，不挤模型）' : '收起模型列表'), null, 'action');
     if (!open) return;
-    loadModelList();
-    renderModelList();                               // 再画一次，马上能看到“正在读取清单…”
+    scanModelList();
+    renderModelList();                               // 再画一次，马上能看到“正在列目录…”
   }
 
   /** 按当前模式重画列表：标题是在用的模型（换过服装会带“· 服装 N”），下面是要点选的条目 */
@@ -590,27 +853,28 @@
     listHead.textContent = '当前：' + (state.modelName || '（还没加载模型）');
     listBox.textContent = '';
     if (listMode === 'cloth') {
-      if (!list.done) { listBox.appendChild(msg('正在读取 ' + CONFIG.modelList + ' …')); return; }
+      if (cloth.loading) { listBox.appendChild(msg('正在列 ' + cloth.dir + ' …')); return; }
       if (!cloth.entries.length) {
-        listBox.appendChild(msg(cloth.dir
-          ? '清单里没有这个模型：' + cloth.dir
+        listBox.appendChild(msg(cloth.error
+          ? '列服装失败：' + cloth.error
+          : cloth.dir ? '这个目录里没有 model*.json：' + cloth.dir
           : '还不知道当前模型在哪个目录'));
         return;
       }
       cloth.entries.forEach(function (c, i) { listBox.appendChild(opt(c.label, c.path, i)); });
       return;
     }
-    if (!list.done) {
-      listBox.appendChild(msg(list.running
-        ? '正在读取 ' + CONFIG.modelList + ' …'
-        : '点一下就开始读取 ' + CONFIG.modelList));
+    if (list.models.length) {   // 边扫边显示：扫到一个就先列一个，不用等整棵树扫完
+      list.models.forEach(function (m, i) { listBox.appendChild(opt(m.label, m.path, i)); });
+      if (list.running) listBox.appendChild(msg('还在扫：已列 ' + list.scanned + ' 个目录，还有 ' + list.queued + ' 个在排队…'));
       return;
     }
-    if (!list.models.length) {
-      listBox.appendChild(msg('没读到模型清单：' + (list.error || CONFIG.modelList + ' 里是空的')));
+    if (list.running) { listBox.appendChild(msg('正在列 ' + modelRoot.share + ' …')); return; }
+    if (list.done) {
+      listBox.appendChild(msg('没扫到模型：' + (list.error || modelRoot.share + ' 往下 ' + CONFIG.modelScanDepth + ' 层里没有 model*.json')));
       return;
     }
-    list.models.forEach(function (m, i) { listBox.appendChild(opt(m.label, m.path, i)); });
+    listBox.appendChild(msg('点一下就开始列 ' + modelRoot.share + '（扫到哪个显示哪个，只等第一次）'));
   }
 
   /**
@@ -649,7 +913,7 @@
 
   /**
    * 换成选中的文件夹：按候选编号从大到小依次试，成功就替换旧模型并收起列表。
-   * @param {object} entry loadModelList() 结果里的一项
+   * @param {object} entry scanModelList() 结果里的一项
    * @returns {void}
    */
   function pickModel(entry) {
@@ -673,17 +937,17 @@
     })(0);
   }
 
-  /* ---------- 服装：拿“当前模型在清单里那一条”的 cloths ---------- */
+  /* ---------- 服装：拿“当前模型所在目录”的 cloths（扫过就用缓存，没扫过单列那一个目录） ---------- */
 
   /**
-   * 打开页面时该加载哪个模型：CONFIG.modelPath 写的是清单 pathBase 后面那一段。
-   * @returns {string} 完整路径
+   * 打开页面时该加载哪个模型：CONFIG.modelPath 写的是 CONFIG.modelRoot 后面那一段。
+   * @returns {string} 完整地址（…/sd/<token>/live2d/菊理千姬/model3.json）
    */
   function defaultModelPath() {
-    return list.pathBase + CONFIG.modelPath;
+    return modelRoot.fileBase + CONFIG.modelPath;
   }
 
-  /** 点“服装”按钮：展开/收起服装列表；内容是当前模型在清单里那一条的 cloths */
+  /** 点“服装”按钮：展开/收起服装列表；内容是当前模型那个目录里的 model*.json */
   function toggleClothList() {
     var open = !(modelList.classList.contains('is-open') && listMode === 'cloth');
     listMode = 'cloth';
@@ -692,14 +956,13 @@
     log('菜单「服装」：' + (open ? '展开服装列表（当前模型同目录）' : '收起服装列表'), null, 'action');
     if (!open) return;
 
-    pickClothDir(state.modelPath || defaultModelPath());
-    loadModelList();     // 清单还没到手就去读一次，读完了那条 .then 里会再挑一次目录
+    pickClothDir(state.modelPath || defaultModelPath()); // 这个目录没列过就会去列一次（一个请求，不用扫整棵树）
     renderModelList();
   }
 
   /**
    * 换成选中的那套服装：走和换模型同一条路（新模型加载成功才销毁旧的，失败就保留当前这套）。
-   * @param {object} entry 清单里 cloths[] 的一项
+   * @param {object} entry 当前目录 cloths[] 的一项
    * @returns {void}
    */
   function pickCloth(entry) {
@@ -764,11 +1027,9 @@
     var cs = contentSize(); // 按实际能画图的尺寸建画布
     if (!L2D.attach(canvas, cs.w, cs.h)) return; // 渲染器没起来就别白白发模型请求
 
-    /* 先读清单：pathBase 到手才知道 CONFIG.modelPath 的完整位置。
-     * 读砸了也照样往下走（pathBase 当空串，就是按页面根目录去找），模型请求不会被一个 json 卡死。 */
-    loadModelList().then(function () {
-      switchModel(defaultModelPath(), labelOfModel(defaultModelPath()));
-    });
+    /* 默认模型的地址是 CONFIG.modelRoot 直接换算出来的，不用先问服务器 → 开页面就加载。
+     * “模型/服装”列表等你点那两个按钮时才去列目录（整棵树扫一次是几十个请求，不该压在页面打开上）。 */
+    switchModel(defaultModelPath(), labelOfModel(defaultModelPath()));
   }
 
   /**
@@ -800,7 +1061,7 @@
       body.classList.add('is-model'); // 本体背景改透明
       state.modelPath = path;
       state.modelName = shown;
-      pickClothDir(path);             // 服装列表跟着换到新模型那一目录（清单里查得到才有）
+      pickClothDir(path);             // 服装列表跟着换到新模型那个目录（没列过会顺手去列一次）
       renderModelList();
       return true;
     });
@@ -813,11 +1074,13 @@
     state: state,      // 运行时状态：passthrough / near / mx,my / drag / lastCloseAt / modelPath
     log: log,
     close: closeApp,
-    switchModel: switchModel,    // live2dWin.switchModel('live2d/誓约/朱诺/model2.json') 可直接换（要写完整路径）
+    switchModel: switchModel,    // live2dWin.switchModel('http://192.168.1.20:5244/sd/38nasKch/live2d/誓约/朱诺/model2.json') 可直接换（要写完整地址）
     toggleHitAreas: toggleHitAreas, // 和菜单按钮同一个入口：显示/隐藏可点击区域
-    loadModelList: loadModelList,   // 读静态清单（读过了直接用缓存；live2dWin.loadModelList(true) 强制重读）
-    get modelEntries() { return list.models; },  // 清单里的模型条目（path 已经拼上 pathBase）
-    get clothEntries() { return cloth.entries; }, // 当前这个目录在清单里对应的那几套服装
+    loadModelList: scanModelList,   // 扫模型目录（扫过了直接用缓存；live2dWin.loadModelList(true) = 连目录缓存一起作废重扫）
+    listDir: listShareDir,          // live2dWin.listDir('/@s/38nasKch/live2d/菊理千姬') 单列一个分享目录，看服务器上到底有什么文件
+    get modelRoot() { return modelRoot; },   // CONFIG.modelRoot 换算出来的那几种地址（share/fileBase/api）
+    get modelEntries() { return list.models; },  // 扫出来的模型条目（path 已经是能取文件的目录地址）
+    get clothEntries() { return cloth.entries; }, // 当前这个目录列出来的那几套服装
     get listMode() { return listMode; },          // 列表框现在显示的是 model 还是 cloth
     get L2D() { return L2D; },     // 引擎层整体：L2D.model / L2D.app / L2D.state / L2D.hitAreas()
   };
