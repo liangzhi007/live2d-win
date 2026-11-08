@@ -24,9 +24,13 @@
  *   js/live2d_win.loader.js   ← 本文件
  *   css/live2d_win.css        → CONFIG.css 里写 '../css/live2d_win.css'（css/ 和 js/ 并排，要回上一级）
  *   js/*.js                   → CONFIG.js 里只写文件名（都和本文件同一个目录）
- *   live2d/            ← 这层不归本文件管：live2d_win.js 直接向 OpenList 的分享目录列（POST /api/fs/list），
- *                CONFIG.modelRoot 写的是分享页地址（…/@s/<token>/live2d），
- *                地址写成相对时基准是“页面自己的地址”；换服务器或换分享只改 CONFIG.modelRoot 一处。
+ *   live2d_list.json、live2d/ ← 不归本文件管：live2d_win.js 用 fetch 读它们，基准是
+ *                live2dWinLoader.repoBase（= 本文件所在 js/ 的上一层，即仓库根），见界面层 resourceBase()。
+ *
+ * 从 GitHub 动态获取（页面里只留一行，本地什么文件都不用留）：
+ *   <script src="https://cdn.jsdelivr.net/gh/liangzhi007/live2d-win@main/js/live2d_win.loader.js"></script>
+ *   本文件从哪加载，js/css/清单/模型就全部跟着从哪加载：BASE 和 repoBase 都是按本文件的
+ *   实际下载地址算的，所以本地打开和 CDN 打开走同一套逻辑，清单里不用写任何硬编码网址。
  *
  * 想调什么：
  *   判定太严/太松 → 【1. 配置区】的 force / byUA / byPointer
@@ -35,6 +39,7 @@
  *   增删注入的文件 → CONFIG.css / CONFIG.js（顺序即加载顺序，都相对本文件所在的 js/）
  *   不想看提示     → CONFIG.log = false
  * 控制台里可以现场验：live2dWinLoader.isMobile() / live2dWinLoader.skipReason() / live2dWinLoader.state / live2dWinLoader.run()
+ *   地址拼对没有 → live2dWinLoader.base（js/ 目录）和 live2dWinLoader.repoBase（仓库根）
  * ============================================================================= */
 (function () {
   'use strict';
@@ -103,6 +108,9 @@
      这里只是看一眼当前 <script> 标签，不下载任何东西，所以手机上也先算好，
      万一之后从控制台手动 live2dWinLoader.run() 才有正确路径。 */
   var BASE = selfDir();
+  /* 仓库根（js/ 的上一层）：界面层拿它当清单 live2d_list.json 和模型目录 pathBase 的基准。
+     本文件从 CDN 加载时它也是同一个 CDN 地址，所以清单/模型跟着自动从 CDN 取，不用写死网址。 */
+  var REPO_BASE = BASE ? new URL('../', BASE).href : new URL('.', document.baseURI).href;
 
   /* ============================ 2. 日志 ============================ */
   /**
@@ -266,6 +274,16 @@
   }
 
   /**
+   * 把 CONFIG 里写的一条路径算成绝对地址（基准 = 本文件所在的 js/）。
+   * 条目直接写 http(s) 绝对地址也认（new URL 对绝对地址原样返回），想混用本地/CDN 文件不用改代码。
+   * @param {string} rel CONFIG.css / CONFIG.js 里的一条
+   * @returns {string} 绝对地址（'../' 已经折干净）
+   */
+  function absUrl(rel) {
+    return new URL(rel, BASE || document.baseURI).href;
+  }
+
+  /**
    * 串行插入一批路径，每条都以 BASE（本文件所在的 js/）为基准。
    * @param {string[]} list CONFIG.css 或 CONFIG.js
    * @param {function(string): Promise<string>} fn addCss / addJs
@@ -275,7 +293,7 @@
     return list.reduce(function (chain, rel) {
       return chain.then(function () {
         if (state.failed && CONFIG.stopOnError) return; // 前面断了，后面不再插
-        return fn(BASE + rel).then(function (url) {
+        return fn(absUrl(rel)).then(function (url) {
           state.injected.push(url);
         }).catch(function (err) {
           state.failed = true;
@@ -323,6 +341,7 @@
     CONFIG: CONFIG,   // 想从控制台临时改判定/文件清单/等待方式，改这个就行（改完得重跑 run()）
     state: state,     // { started, done, failed, stage, injected, mobile, skipMsg }
     base: BASE,       // 本文件所在目录，CONFIG 里相对路径的基准（控制台里看一眼就知道拼对没有）
+    repoBase: REPO_BASE, // 仓库根（js/ 的上一层）：界面层用它拼清单和模型地址，同样跟着本文件的来源走
     isMobile: isMobile,
     skipReason: skipReason,  // 看一眼当前地址会不会被 CONFIG.skipPath 拦掉（控制台里改完 CONFIG 再调它验）
     run: run,

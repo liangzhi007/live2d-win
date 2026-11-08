@@ -92,7 +92,7 @@ const json = {
   _说明: [
     '这是小窗“模型/服装”两个列表的静态清单，由 node tools/scan-live2d.mjs 扫描生成，别手改（改完下次重扫就没了）。',
     '完整地址 = pathBase + dir + file。例：pathBase="live2d/"、dir="菊理千姬/"、file="model3.json" → live2d/菊理千姬/model3.json。',
-    '换到别的服务器只改 pathBase 一处：可以写相对页面的路径，也可以写 https://xxx/live2d/ 这种绝对地址（末尾的 / 别丢）。',
+    '换到别的服务器只改 pathBase 一处：相对写（如 live2d/）以 loader 所在仓库根为基准（loader 从 CDN 加载时模型跟着从 CDN 取），也可以写 https://xxx/live2d/ 这种绝对地址（末尾的 / 别丢）。',
     'files = 点“模型”时依次尝试的编号（从大到小，带同名 moc 的优先）；cloths = 点“服装”看到的列表（编号从小到大）。',
     'cloths[].moc=false 表示这个编号没有对应的 Moc_N.moc3，多半加载不了，列表里会标出来。',
   ],

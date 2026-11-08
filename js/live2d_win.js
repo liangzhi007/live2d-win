@@ -31,8 +31,10 @@
   /* ============================ 1. 配置区 ============================ */
   var CONFIG = {
     sizeRatio: 0.11,        // 小窗面积占视口面积的比例（0.1 = 十分之一屏），窗口缩放自动跟着变大变小
-    modelList: 'live2d_list.json', // “模型/服装”列表用的静态清单（node tools/scan-live2d.mjs 生成，
-                             // 清单最前面有 pathBase = 模型目录在服务器上的位置，换服务器只改那一处）
+    modelList: 'live2d_list.json', // “模型/服装”列表用的静态清单（node tools/scan-live2d.mjs 生成）。
+                             // 相对路径的基准 = loader 所在仓库根（resourceBase()，见【6.3】）：
+                             // loader 从 GitHub CDN 加载时清单自动跟着从 CDN 读，注入到任何页面都不会读错地方。
+                             // 清单里的 pathBase 是模型目录的位置，换服务器只改那一处（相对写同样以仓库根为基准）。
     modelPath: '菊理千姬/model3.json', // 打开页面时先加载这个；之后点“模型”按钮换。
                              // ★ 写的是 pathBase 后面那一段：清单里 pathBase='live2d/' 时就是 live2d/菊理千姬/model3.json
     modelTryMax: 4,          // “模型”列表选文件夹时，同目录多个 modelN.json 从编号大的开始试，最多试几个
@@ -488,6 +490,8 @@
    *   清单开头是 pathBase（模型目录在服务器上的位置，换服务器只改它），
    *   下面 models[] 一条 = 一个模型目录：{ name, dir, files:[modelN 编号从大到小], cloths:[{ n, file, moc }] }。
    *   “模型”列表拿 name + dir，“服装”列表拿当前模型那一条的 cloths；完整地址 = pathBase + dir + file。
+   * 清单地址和相对写的 pathBase 都以 resourceBase()（loader 所在仓库根）为基准：
+   *   loader 从 GitHub CDN 加载时，清单和模型全部自动从同一个 CDN 目录获取（动态获取，无硬编码网址）。
    * 列表框是同一个（.app__list），用 listMode 区分现在显示的是模型还是服装，所以两个按钮各点一次会互相替换。 */
   var list = {                    // 静态清单的读取状态
     pathBase: '', models: [],     // models[] 里每条已经补上 path（目录全路径）和 cloths[].path/label
@@ -497,6 +501,18 @@
     dir: '', entries: [],
   };
   var listMode = 'model';         // 列表框当前显示的模式：'model' | 'cloth'
+
+  /**
+   * 清单和模型目录的基准地址：跟着 loader 的来源走。
+   * loader 从哪加载（本地 js/ 或 GitHub CDN），repoBase 就是哪的仓库根（末尾带 /）；
+   * 没走 loader（页面直接引本文件）时退回页面所在目录，和老行为一致。
+   * @returns {string} 末尾带 / 的绝对地址
+   */
+  function resourceBase() {
+    var loader = window.live2dWinLoader;
+    if (loader && loader.repoBase) return loader.repoBase;
+    return new URL('.', document.baseURI).href;
+  }
 
   /**
    * 读一次静态清单，把每条都补成“拿来就能用”的样子（路径直接拼好，服装 label 也在这里算）。
@@ -509,16 +525,20 @@
     if (list.done && !force) return Promise.resolve(list.models);
     list.running = true;
     list.error = '';
-    list.promise = fetch(CONFIG.modelList).then(function (res) {
-      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + CONFIG.modelList + '）');
+    var url = new URL(CONFIG.modelList, resourceBase()).href; // 相对清单以 loader 所在仓库根为基准
+    list.promise = fetch(url).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + url + '）');
       return res.json();
     }, function (err) {
-      throw new Error('读不到清单 ' + CONFIG.modelList + '：' + err.message);
+      throw new Error('读不到清单 ' + url + '：' + err.message);
     }).then(function (data) {
-      var base = data.pathBase || '';
+      // pathBase 相对写（如 'live2d/'）时同样以仓库根为基准；写绝对地址则原样用；留空 = 仓库根本身
+      var base = data.pathBase ? new URL(data.pathBase, resourceBase()).href : resourceBase();
       list.pathBase = base;
       list.models = (data.models || []).map(function (m) {
-        var dir = base + (m.dir || '');
+        // 用 new URL 拼目录：中文目录名统一转成 percent-encoding，和 switchModel 里的规范化保持一致，
+        // 否则服装列表按目录比对时，编码过的当前路径会匹配不上清单里未编码的路径
+        var dir = new URL(m.dir || '', base).href;
         return {
           label: m.name,
           path: dir,                                   // 目录，末尾带 /
@@ -545,7 +565,7 @@
       pickClothDir(state.modelPath || defaultModelPath()); // 清单可能比模型先到，这里对齐一下服装那条
       renderModelList();
       /* ▼ 日志调用点 */
-      log('读取清单 ' + CONFIG.modelList + '：' + list.models.length + ' 个模型'
+      log('读取清单 ' + url + '：' + list.models.length + ' 个模型'
         + (list.error ? '（失败：' + list.error + '）' : '，pathBase=' + list.pathBase),
         list.error ? null : list.models, list.error ? 'error' : 'action');
       return list.models;
@@ -677,10 +697,11 @@
 
   /**
    * 打开页面时该加载哪个模型：CONFIG.modelPath 写的是清单 pathBase 后面那一段。
+   * 同样用 new URL 规范化（中文转编码），和清单条目、switchModel 的格式保持一致。
    * @returns {string} 完整路径
    */
   function defaultModelPath() {
-    return list.pathBase + CONFIG.modelPath;
+    return list.pathBase ? new URL(CONFIG.modelPath, list.pathBase).href : CONFIG.modelPath;
   }
 
   /** 点“服装”按钮：展开/收起服装列表；内容是当前模型在清单里那一条的 cloths */
@@ -773,24 +794,28 @@
 
   /**
    * 从 model*.json 的路径推出一个好读的名字：取它所在的文件夹名。
+   * 路径里的中文目录名可能是 percent-encoding（new URL 规范化过），解码回中文再显示。
    * @param {string} path 模型文件路径
    * @returns {string} 显示名
    */
   function labelOfModel(path) {
     var parts = path.replace(/\/+$/, '').split('/');
     parts.pop();                        // 去掉文件名
-    return parts.pop() || path;         // 文件夹名；直接在根目录就退回整条路径
+    var folder = parts.pop() || path;   // 文件夹名；直接在根目录就退回整条路径
+    try { folder = decodeURIComponent(folder); } catch (e) { /* 含裸 % 的非法编码就原样显示 */ }
+    return folder;
   }
 
   /**
    * 换成指定路径的模型：导入交给引擎，只有真成功了界面才跟着改。
    * 加载失败时引擎自己会留一条错误日志，界面这边保持原样（立绘、标题都不动）。
-   * @param {string} path model*.json 的相对路径
+   * @param {string} path model*.json 的路径：相对写以 loader 所在仓库根为基准，绝对地址原样用
    * @param {string} [name] 列表标题和日志里显示的名字，不传就取模型所在的文件夹名
    * @returns {Promise<boolean>} 是否切换成功
    */
   function switchModel(path, name) {
     if (!L2D) return Promise.resolve(false);
+    path = new URL(path, resourceBase()).href; // 控制台手动调 live2dWin.switchModel('live2d/…') 也能找对地方
     var shown = name || labelOfModel(path);
     return L2D.load(path, shown).then(function (ok) {
       if (!ok) return false;
@@ -813,7 +838,7 @@
     state: state,      // 运行时状态：passthrough / near / mx,my / drag / lastCloseAt / modelPath
     log: log,
     close: closeApp,
-    switchModel: switchModel,    // live2dWin.switchModel('live2d/誓约/朱诺/model2.json') 可直接换（要写完整路径）
+    switchModel: switchModel,    // live2dWin.switchModel('live2d/誓约/朱诺/model2.json') 可直接换（相对仓库根，绝对地址也行）
     toggleHitAreas: toggleHitAreas, // 和菜单按钮同一个入口：显示/隐藏可点击区域
     loadModelList: loadModelList,   // 读静态清单（读过了直接用缓存；live2dWin.loadModelList(true) 强制重读）
     get modelEntries() { return list.models; },  // 清单里的模型条目（path 已经拼上 pathBase）
