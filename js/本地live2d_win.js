@@ -279,8 +279,15 @@
     return rectDistance(r, x, y);
   }
 
-  /** 靠近状态同时驱动两块浮层：正常模式的菜单栏 / 穿透模式的 ghost 关闭键 */
+  /** 靠近状态同时驱动两块浮层：正常模式的菜单栏 / 穿透模式的 ghost 关闭键。
+   * 鼠标离开时顺带把展开的模型/服装列表真正关掉（摘掉 is-open，不是只跟着面板藏起来）：
+   * 下次靠近只剩菜单栏，想看列表得重新点一下按钮。 */
   function applyNear(on) {
+    if (!on && state.near && modelList.classList.contains('is-open')) {
+      modelList.classList.remove('is-open');
+      /* ▼ 日志调用点 */
+      log('鼠标移开：模型/服装列表已关闭（没做选择也关）', null, 'action');
+    }
     state.near = on;
     app.classList.toggle('is-near', on && !state.passthrough);
     ghostClose.classList.toggle('is-near', on && state.passthrough);
