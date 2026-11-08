@@ -13,7 +13,8 @@
  *                CONFIG.paintFrames 帧，确认首帧真的画到屏幕上了才开始插。
  *   4) 最后才插：按 CONFIG.css → CONFIG.js 的顺序一个一个插进页面。
  *                JS 必须串行：live2d_model.js 要等 pixi / cubism 那几个到位，
- *                live2d_win.js 又必须在 live2d_model.js 后面（要用 window.L2D）。
+ *                界面层（live2d_win.js / 本地live2d_win.js 二选一，见 CONFIG.localList）
+ *                又必须在 live2d_model.js 后面（要用 window.L2D）。
  *
  * 不拖慢原网页：插进去的东西一律等原网页显示完才开始下载，本文件自己在 head 里
  *   只是同步执行几十行判断，不下载任何东西；样式还额外用 media="print" 的写法插，
@@ -24,7 +25,7 @@
  *   js/live2d_win.loader.js   ← 本文件
  *   css/live2d_win.css        → CONFIG.css 里写 '../css/live2d_win.css'（css/ 和 js/ 并排，要回上一级）
  *   js/*.js                   → CONFIG.js 里只写文件名（都和本文件同一个目录）
- *   live2d_list.json、live2d/ ← 不归本文件管：live2d_win.js 用 fetch 读它们，基准是
+ *   live2d_list.json、live2d/ ← 不归本文件管：界面层用 fetch 读它们，基准是
  *                live2dWinLoader.repoBase（= 本文件所在 js/ 的上一层，即仓库根），见界面层 resourceBase()。
  *
  * 从 GitHub 动态获取（页面里只留一行，本地什么文件都不用留）：
@@ -37,6 +38,7 @@
  *   哪些页面不插   → CONFIG.skipPath（正则，命中就跳过；默认只认 /@manage，null = 关掉这道闸）
  *   想早点插小窗   → CONFIG.waitFor（'load' 最稳，'dom' 只等 DOM，'none' 立刻插）
  *   增删注入的文件 → CONFIG.css / CONFIG.js（顺序即加载顺序，都相对本文件所在的 js/）
+ *   列表来源       → CONFIG.localList（false = 动态版 live2d_win.js；true = 本地清单版 本地live2d_win.js）
  *   不想看提示     → CONFIG.log = false
  * 控制台里可以现场验：live2dWinLoader.isMobile() / live2dWinLoader.skipReason() / live2dWinLoader.state / live2dWinLoader.run()
  *   地址拼对没有 → live2dWinLoader.base（js/ 目录）和 live2dWinLoader.repoBase（仓库根）
@@ -79,9 +81,14 @@
       'index.cp.js',             // pixi-live2d-display（Cubism 4 绑定）
       'extra.min.js',            // pixi-live2d-display 扩展：HitAreaFrames（显示可点击区域）
       'live2d_model.js',         // 引擎层：导入模型 + 点击/滑动交互
-      'live2d_win.js',           // 界面层：左下角小窗（必须在引擎层后面）
+      // 界面层二选一，按 CONFIG.localList 在本数组末尾追加（必须在引擎层后面）
     ],
+    localList: false,      // 界面层用哪一份：false = live2d_win.js（CDN 模式动态扫 GitHub 出模型/服装列表）；
+                           // true = 本地live2d_win.js（列表永远读静态清单 live2d_list.json，不依赖 GitHub API，
+                           // 适合内网/OpenList；加了新模型要重跑 tools/scan-live2d.mjs 更新清单）
   };
+  /* 两份界面层功能相同、只有列表来源不同，同一页面只插一份 */
+  CONFIG.js.push(CONFIG.localList ? '本地live2d_win.js' : 'live2d_win.js');
 
   var state = {
     started: false,   // run() 跑过了
