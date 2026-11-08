@@ -9,8 +9,8 @@
  *   #App                 左下角小窗，边长随屏幕缩放（面积 ≈ 视口的 CONFIG.sizeRatio，默认 1/10 屏）
  *     ├ .app__body       本体，里面是 .app__canvas（PIXI 画布）+ Live2D 模型，和 div 一样大
  *     └ .app__panel      顶部悬浮面板（平时隐藏；只有鼠标靠近“这一条”才出现，停在立绘上不会展开）
- *         ├ .app__list   列表区（点“模型”出模型列表、点“服装”出同目录的服装列表，两份内容都来自
- *         │              CONFIG.modelList 那个静态清单，见【6.3】）
+ *         ├ .app__list   列表区（点“模型”出模型列表、点“服装”出同目录的服装列表，两份内容都是
+ *         │              运行时获取的：CDN 模式动态扫 GitHub 仓库，本地 loader 读静态清单，见【6.3】）
  *         └ .app__menu   菜单栏：模型 / 服装 / 声音 / 显示可点击区域 / 移动 / 关闭
  *                        每个按钮 = 一个 .app__icon 图标 + 一句提示文字
  *                        提示走页面自己的 tooltip（#AppTip，见【4.1】）：鼠标一停上去就出现，圆角可控
@@ -31,10 +31,12 @@
   /* ============================ 1. 配置区 ============================ */
   var CONFIG = {
     sizeRatio: 0.11,        // 小窗面积占视口面积的比例（0.1 = 十分之一屏），窗口缩放自动跟着变大变小
-    modelList: 'live2d_list.json', // “模型/服装”列表用的静态清单（node tools/scan-live2d.mjs 生成）。
-                             // 相对路径的基准 = loader 所在仓库根（resourceBase()，见【6.3】）：
-                             // loader 从 GitHub CDN 加载时清单自动跟着从 CDN 读，注入到任何页面都不会读错地方。
-                             // 清单里的 pathBase 是模型目录的位置，换服务器只改那一处（相对写同样以仓库根为基准）。
+    modelList: 'live2d_list.json', // 静态清单（node tools/scan-live2d.mjs 生成）：只在本地 loader 模式、
+                             // 或 GitHub 动态扫描失败且没有缓存时兜底用（见【6.3】）。
+                             // 相对路径的基准 = loader 所在仓库根（resourceBase()）。
+    modelDir: 'live2d/',       // 模型目录（仓库根往下）：GitHub 动态扫描从这里扫，默认模型也按它定位
+    listCacheKey: 'live2dWin.modelList', // 动态扫描结果在 localStorage 里的缓存键（换仓库/ref 自动作废）
+    listCacheMin: 30,          // 扫描结果缓存多少分钟：期内直接用缓存；过期先显示旧的、后台重扫
     modelPath: '菊理千姬/model3.json', // 打开页面时先加载这个；之后点“模型”按钮换。
                              // ★ 写的是 pathBase 后面那一段：清单里 pathBase='live2d/' 时就是 live2d/菊理千姬/model3.json
     modelTryMax: 4,          // “模型”列表选文件夹时，同目录多个 modelN.json 从编号大的开始试，最多试几个
@@ -485,15 +487,16 @@
     log('双击关闭：小窗已移除（刷新页面可恢复）', null, 'warn');
   }
 
-  /* ---------- 6.3 模型 / 服装列表：内容来自静态清单 live2d_list.json，点一下就换 ---------- */
-  /* 清单由项目根的 tools/scan-live2d.mjs 扫目录生成（页面不再依赖服务器的目录列表功能）：
-   *   清单开头是 pathBase（模型目录在服务器上的位置，换服务器只改它），
-   *   下面 models[] 一条 = 一个模型目录：{ name, dir, files:[modelN 编号从大到小], cloths:[{ n, file, moc }] }。
+  /* ---------- 6.3 模型 / 服装列表：运行时动态获取，点一下就换 ---------- */
+  /* 数据来源按 loader 的位置自动选（resourceBase()）：
+   *   loader 从 GitHub CDN（jsDelivr gh）加载 → 调 GitHub 目录树 API 动态扫仓库里的 modelDir，
+   *     在浏览器里现算出模型/服装列表（规则同 tools/scan-live2d.mjs）；结果缓存 localStorage
+   *     CONFIG.listCacheMin 分钟，过期先显示旧的、后台重扫；扫描失败先用旧缓存、再读静态清单兜底。
+   *   本地 loader → 读静态清单 live2d_list.json（node tools/scan-live2d.mjs 生成）。
+   * 两种来源的数据同构：{ pathBase, models:[{ name, dir, files:[编号从大到小], cloths:[{ n, file, moc }] }] }，
    *   “模型”列表拿 name + dir，“服装”列表拿当前模型那一条的 cloths；完整地址 = pathBase + dir + file。
-   * 清单地址和相对写的 pathBase 都以 resourceBase()（loader 所在仓库根）为基准：
-   *   loader 从 GitHub CDN 加载时，清单和模型全部自动从同一个 CDN 目录获取（动态获取，无硬编码网址）。
    * 列表框是同一个（.app__list），用 listMode 区分现在显示的是模型还是服装，所以两个按钮各点一次会互相替换。 */
-  var list = {                    // 静态清单的读取状态
+  var list = {                    // 清单的获取状态
     pathBase: '', models: [],     // models[] 里每条已经补上 path（目录全路径）和 cloths[].path/label
     running: false, done: false, error: '', promise: null,
   };
@@ -515,61 +518,212 @@
   }
 
   /**
-   * 读一次静态清单，把每条都补成“拿来就能用”的样子（路径直接拼好，服装 label 也在这里算）。
-   * 只发一个请求，读过了（不管成没成）就不再重读；想强制重读用 live2dWin.loadModelList(true)。
-   * @param {boolean} [force] true = 忽略缓存再读一次（改了清单想在同一个页面里看到新内容时用）
+   * 从 loader 的来源推出 GitHub 仓库：是 jsDelivr gh 地址就能动态扫，其它（本地 loader）返回 null。
+   * 例：https://cdn.jsdelivr.net/gh/liangzhi007/live2d-win@main/ → 扫这个仓库的 main 分支。
+   * @returns {{ api: string, pathBase: string }|null} api = GitHub 目录树接口；pathBase = 模型目录的绝对地址
+   */
+  function githubSource() {
+    var m = resourceBase().match(/^https:\/\/cdn\.jsdelivr\.net\/gh\/([^/]+)\/([^/@]+)@([^/]+)\//);
+    if (!m) return null;
+    return {
+      api: 'https://api.github.com/repos/' + m[1] + '/' + m[2] + '/git/trees/' + m[3] + '?recursive=1',
+      pathBase: new URL(CONFIG.modelDir, resourceBase()).href,
+    };
+  }
+
+  /**
+   * 读 localStorage 里的扫描缓存；不是同一个仓库/ref 的缓存直接当没有。
+   * @param {{ api: string }} gh githubSource() 的结果
+   * @returns {{ at: number, data: object }|null}
+   */
+  function readListCache(gh) {
+    try {
+      var c = JSON.parse(localStorage.getItem(CONFIG.listCacheKey) || 'null');
+      return c && c.source === gh.api && c.data ? c : null;
+    } catch (e) { return null; } // 隐私模式等读不了就算了
+  }
+
+  /**
+   * 把扫描结果写进 localStorage。
+   * @param {{ api: string }} gh githubSource() 的结果
+   * @param {object} data 扫描出的清单数据
+   * @returns {void}
+   */
+  function writeListCache(gh, data) {
+    try {
+      localStorage.setItem(CONFIG.listCacheKey, JSON.stringify({ at: Date.now(), source: gh.api, data: data }));
+    } catch (e) { /* 写不了（隐私模式/配额满）就不缓存 */ }
+  }
+
+  /**
+   * 读静态清单 live2d_list.json（本地 loader 模式的数据源，也是动态扫描失败时的兜底）。
+   * @returns {Promise<object>} { pathBase, models } 原始结构
+   */
+  function fetchStaticList() {
+    var url = new URL(CONFIG.modelList, resourceBase()).href; // 相对清单以 loader 所在仓库根为基准
+    return fetch(url).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + url + '）');
+      return res.json();
+    }, function (err) {
+      throw new Error('读不到清单 ' + url + '：' + err.message);
+    });
+  }
+
+  /**
+   * 动态扫描 GitHub 仓库的模型目录：一次请求拿到整棵目录树，在浏览器里现算模型/服装列表。
+   * 判定规则和 tools/scan-live2d.mjs 一一对应（改这里等于改两边，尽量保持一致）：
+   *   最多钻 3 层；目录里有 model*.json 就算模型目录、不再往深里找；
+   *   files 先试有同名 Moc_N.moc3 的编号（从大到小），一个都对不上就全按编号从大到小；
+   *   cloths = 全部 model*.json 按编号从小到大，没对应 moc 的标出来；名字按中文拼音排。
+   * @param {{ api: string, pathBase: string }} gh githubSource() 的结果
+   * @returns {Promise<object>} 和静态清单同构的 { pathBase, models }
+   */
+  function scanGithubModels(gh) {
+    return fetch(gh.api).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + gh.api + '）');
+      return res.json();
+    }).then(function (data) {
+      if (data.truncated) throw new Error('仓库文件太多，GitHub 目录树被截断了');
+      var dirs = {}; // 目录（相对 modelDir，末尾带 /）→ { models: {编号:true}, mocs: {编号:true} }
+      (data.tree || []).forEach(function (t) {
+        if (t.type !== 'blob' || t.path.indexOf(CONFIG.modelDir) !== 0) return;
+        var rel = t.path.slice(CONFIG.modelDir.length);
+        var slash = rel.lastIndexOf('/');
+        var dir = slash < 0 ? '' : rel.slice(0, slash + 1);
+        var file = slash < 0 ? rel : rel.slice(slash + 1);
+        var m = file.match(/^model(\d*)\.json$/i);
+        var moc = file.match(/^moc[_-]?(\d+).*\.moc3?$/i);
+        if (!m && !moc) return;
+        var d = dirs[dir] || (dirs[dir] = { models: {}, mocs: {} });
+        if (m) d.models[m[1]] = true;
+        if (moc) d.mocs[moc[1]] = true;
+      });
+      // 有 model*.json 的目录按深度从浅到深收；祖先已收下的不再收（对应“遇到模型目录就停”）
+      var accepted = [];
+      Object.keys(dirs).filter(function (dir) {
+        return Object.keys(dirs[dir].models).length > 0 && dir.split('/').length <= 3; // 根=1 层，誓约/朱诺=3 层
+      }).sort(function (a, b) {
+        return a.split('/').length - b.split('/').length || a.localeCompare(b, 'zh-Hans-CN');
+      }).forEach(function (dir) {
+        for (var i = 0; i < accepted.length; i++) {
+          if (dir.indexOf(accepted[i]) === 0) return; // 祖先目录已经是模型目录
+        }
+        accepted.push(dir);
+      });
+      var models = accepted.map(function (dir) {
+        var d = dirs[dir];
+        var nums = Object.keys(d.models);
+        var picks = nums.filter(function (n) { return n && d.mocs[n]; });
+        if (!picks.length) picks = nums.slice();
+        picks.sort(function (a, b) { return (b | 0) - (a | 0); });
+        return {
+          name: dir.replace(/\/$/, ''),
+          dir: dir,
+          files: picks,
+          cloths: nums.slice().sort(function (a, b) { return (a | 0) - (b | 0); }).map(function (n) {
+            return { n: n, file: 'model' + n + '.json', moc: n === '' ? true : !!d.mocs[n] };
+          }),
+        };
+      });
+      models.sort(function (a, b) { return a.name.localeCompare(b.name, 'zh-Hans-CN'); });
+      return { pathBase: gh.pathBase, models: models };
+    });
+  }
+
+  /**
+   * 把一份清单数据补成“拿来就能用”的样子写进 list（路径拼好、中文目录转编码、服装 label 算好）。
+   * @param {object} data { pathBase, models }（静态清单或动态扫描的结果，同构）
+   * @returns {Array} 补全后的 models
+   */
+  function applyList(data) {
+    // pathBase 相对写（如 'live2d/'）时以仓库根为基准；写绝对地址则原样用；留空 = 仓库根本身
+    var base = data.pathBase ? new URL(data.pathBase, resourceBase()).href : resourceBase();
+    list.pathBase = base;
+    list.models = (data.models || []).map(function (m) {
+      // 用 new URL 拼目录：中文目录名统一转成 percent-encoding，和 switchModel 里的规范化保持一致，
+      // 否则服装列表按目录比对时，编码过的当前路径会匹配不上清单里未编码的路径
+      var dir = new URL(m.dir || '', base).href;
+      return {
+        label: m.name,
+        path: dir,                                   // 目录，末尾带 /
+        files: m.files || [],
+        cloths: (m.cloths || []).map(function (c) {
+          return {
+            n: c.n,
+            moc: c.moc !== false,
+            path: dir + c.file,
+            label: '服装 ' + (c.n === '' ? '（无编号）' : c.n)
+                 + (c.n && c.moc === false ? '（没有对应 moc）' : ''),
+          };
+        }),
+      };
+    });
+    return list.models;
+  }
+
+  /**
+   * 收尾：清单到手（或失败）后统一走这里——复位状态、对齐服装目录、重画列表、写日志。
+   * @param {object|null} data 清单数据；null = 彻底失败（list.error 已写好）
+   * @param {string} from 数据来源说明（日志用）
+   * @returns {Array} list.models
+   */
+  function finishList(data, from) {
+    list.running = false;
+    list.done = true;
+    list.promise = null;
+    if (data) applyList(data);
+    pickClothDir(state.modelPath || defaultModelPath()); // 清单可能比模型先到，这里对齐一下服装那条
+    renderModelList();
+    /* ▼ 日志调用点 */
+    log('模型清单（' + from + '）：' + list.models.length + ' 个模型'
+      + (list.error ? '（失败：' + list.error + '）' : '，pathBase=' + list.pathBase),
+      list.error ? null : list.models, list.error ? 'error' : 'action');
+    return list.models;
+  }
+
+  /**
+   * 获取模型/服装列表，来源按 loader 的位置自动选（见【6.3】开头）：
+   *   CDN 模式 → 动态扫 GitHub 仓库（结果缓存 CONFIG.listCacheMin 分钟；过期先显示旧的、后台重扫；
+   *              扫描失败先用旧缓存，没缓存再读静态清单兜底）；
+   *   本地 loader → 读静态清单 live2d_list.json。
+   * 获取过了（不管成没成）就不再重获取；想强制重来用 live2dWin.loadModelList(true)。
+   * @param {boolean} [force] true = 忽略缓存重新获取
    * @returns {Promise<Array>} 补全后的 models，同时写进 list 并重画列表
    */
   function loadModelList(force) {
     if (list.running) return list.promise;
     if (list.done && !force) return Promise.resolve(list.models);
+    var gh = githubSource();
+    var cached = gh ? readListCache(gh) : null;
+    if (cached && !force && Date.now() - cached.at < CONFIG.listCacheMin * 60000) {
+      return Promise.resolve(finishList(cached.data, 'localStorage 缓存'));
+    }
     list.running = true;
     list.error = '';
-    var url = new URL(CONFIG.modelList, resourceBase()).href; // 相对清单以 loader 所在仓库根为基准
-    list.promise = fetch(url).then(function (res) {
-      if (!res.ok) throw new Error('HTTP ' + res.status + '（' + url + '）');
-      return res.json();
+    var from = gh ? 'GitHub 动态扫描 ' + gh.api : '静态清单 ' + new URL(CONFIG.modelList, resourceBase()).href;
+    list.promise = (gh ? scanGithubModels(gh) : fetchStaticList()).then(function (data) {
+      if (gh) writeListCache(gh, data);
+      return data;
     }, function (err) {
-      throw new Error('读不到清单 ' + url + '：' + err.message);
+      /* ▼ 日志调用点 */
+      log('模型列表获取失败：' + err.message + (cached ? ' → 先用上次的缓存' : ' → 改读静态清单兜底'), null, 'warn');
+      if (cached) return cached.data;
+      return fetchStaticList();
     }).then(function (data) {
-      // pathBase 相对写（如 'live2d/'）时同样以仓库根为基准；写绝对地址则原样用；留空 = 仓库根本身
-      var base = data.pathBase ? new URL(data.pathBase, resourceBase()).href : resourceBase();
-      list.pathBase = base;
-      list.models = (data.models || []).map(function (m) {
-        // 用 new URL 拼目录：中文目录名统一转成 percent-encoding，和 switchModel 里的规范化保持一致，
-        // 否则服装列表按目录比对时，编码过的当前路径会匹配不上清单里未编码的路径
-        var dir = new URL(m.dir || '', base).href;
-        return {
-          label: m.name,
-          path: dir,                                   // 目录，末尾带 /
-          files: m.files || [],
-          cloths: (m.cloths || []).map(function (c) {
-            return {
-              n: c.n,
-              moc: c.moc !== false,
-              path: dir + c.file,
-              label: '服装 ' + (c.n === '' ? '（无编号）' : c.n)
-                   + (c.n && c.moc === false ? '（没有对应 moc）' : ''),
-            };
-          }),
-        };
-      });
+      return finishList(data, from);
     }, function (err) {
       list.error = err.message;
       list.pathBase = '';
       list.models = [];
-    }).then(function () {
-      list.running = false;
-      list.done = true;
-      list.promise = null;
-      pickClothDir(state.modelPath || defaultModelPath()); // 清单可能比模型先到，这里对齐一下服装那条
-      renderModelList();
-      /* ▼ 日志调用点 */
-      log('读取清单 ' + url + '：' + list.models.length + ' 个模型'
-        + (list.error ? '（失败：' + list.error + '）' : '，pathBase=' + list.pathBase),
-        list.error ? null : list.models, list.error ? 'error' : 'action');
-      return list.models;
+      return finishList(null, from);
     });
+    if (cached) { // 缓存过期：先拿旧的顶上立刻能看，扫描在后台继续，扫完 finishList 会自动重画
+      applyList(cached.data);
+      list.done = true;
+      pickClothDir(state.modelPath || defaultModelPath());
+      renderModelList();
+      return Promise.resolve(list.models);
+    }
     return list.promise;
   }
 
@@ -610,7 +764,7 @@
     listHead.textContent = '当前：' + (state.modelName || '（还没加载模型）');
     listBox.textContent = '';
     if (listMode === 'cloth') {
-      if (!list.done) { listBox.appendChild(msg('正在读取 ' + CONFIG.modelList + ' …')); return; }
+      if (!list.done) { listBox.appendChild(msg('正在获取模型列表…')); return; }
       if (!cloth.entries.length) {
         listBox.appendChild(msg(cloth.dir
           ? '清单里没有这个模型：' + cloth.dir
@@ -622,12 +776,12 @@
     }
     if (!list.done) {
       listBox.appendChild(msg(list.running
-        ? '正在读取 ' + CONFIG.modelList + ' …'
-        : '点一下就开始读取 ' + CONFIG.modelList));
+        ? '正在获取模型列表…（首次动态扫 GitHub 仓库约需半分钟）'
+        : '点一下就开始获取模型列表'));
       return;
     }
     if (!list.models.length) {
-      listBox.appendChild(msg('没读到模型清单：' + (list.error || CONFIG.modelList + ' 里是空的')));
+      listBox.appendChild(msg('没读到模型清单：' + (list.error || '清单是空的')));
       return;
     }
     list.models.forEach(function (m, i) { listBox.appendChild(opt(m.label, m.path, i)); });
@@ -696,12 +850,14 @@
   /* ---------- 服装：拿“当前模型在清单里那一条”的 cloths ---------- */
 
   /**
-   * 打开页面时该加载哪个模型：CONFIG.modelPath 写的是清单 pathBase 后面那一段。
+   * 打开页面时该加载哪个模型：CONFIG.modelPath 写的是模型目录（pathBase / modelDir）后面那一段。
+   * 清单还没到手时按 仓库根 + modelDir 定位（CDN 动态模式默认模型不等清单，见 initModel）；
    * 同样用 new URL 规范化（中文转编码），和清单条目、switchModel 的格式保持一致。
    * @returns {string} 完整路径
    */
   function defaultModelPath() {
-    return list.pathBase ? new URL(CONFIG.modelPath, list.pathBase).href : CONFIG.modelPath;
+    var base = list.pathBase || new URL(CONFIG.modelDir, resourceBase()).href;
+    return new URL(CONFIG.modelPath, base).href;
   }
 
   /** 点“服装”按钮：展开/收起服装列表；内容是当前模型在清单里那一条的 cloths */
@@ -785,11 +941,16 @@
     var cs = contentSize(); // 按实际能画图的尺寸建画布
     if (!L2D.attach(canvas, cs.w, cs.h)) return; // 渲染器没起来就别白白发模型请求
 
-    /* 先读清单：pathBase 到手才知道 CONFIG.modelPath 的完整位置。
-     * 读砸了也照样往下走（pathBase 当空串，就是按页面根目录去找），模型请求不会被一个 json 卡死。 */
-    loadModelList().then(function () {
+    /* CDN 动态模式：模型位置 = 仓库根 + modelDir，不用等清单（首次扫 GitHub 可能要半分钟），
+     * 清单在后台扫，扫完菜单里自然有；本地模式：静态清单读得很快，先读再加载（pathBase 可能被改成别的服务器）。 */
+    if (githubSource()) {
+      loadModelList();
       switchModel(defaultModelPath(), labelOfModel(defaultModelPath()));
-    });
+    } else {
+      loadModelList().then(function () {
+        switchModel(defaultModelPath(), labelOfModel(defaultModelPath()));
+      });
+    }
   }
 
   /**
@@ -840,7 +1001,7 @@
     close: closeApp,
     switchModel: switchModel,    // live2dWin.switchModel('live2d/誓约/朱诺/model2.json') 可直接换（相对仓库根，绝对地址也行）
     toggleHitAreas: toggleHitAreas, // 和菜单按钮同一个入口：显示/隐藏可点击区域
-    loadModelList: loadModelList,   // 读静态清单（读过了直接用缓存；live2dWin.loadModelList(true) 强制重读）
+    loadModelList: loadModelList,   // 获取模型列表（CDN 动态扫 GitHub / 本地读静态清单；true = 忽略缓存强制重获取）
     get modelEntries() { return list.models; },  // 清单里的模型条目（path 已经拼上 pathBase）
     get clothEntries() { return cloth.entries; }, // 当前这个目录在清单里对应的那几套服装
     get listMode() { return listMode; },          // 列表框现在显示的是 model 还是 cloth
